@@ -74,7 +74,9 @@
             android:backgroundTint="@color/purple_500"
             app:fabCustomSize="50dp"
             android:src="@drawable/ic_pdf_add_white"
-            android:tint="@color/white"/>
+            android:tint="@color/white">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
     </LinearLayout>
 
