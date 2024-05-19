@@ -31,28 +31,27 @@ class AdapterCategory : RecyclerView.Adapter<AdapterCategory.HolderCategory>, Fi
     //tạo view holder cho RecycleView (hiển thị các mục có thể tái sử dụng các view được tạo ra trước đó -> tối ưu)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HolderCategory {
         // tạo ra 1 đối tượng RCB từ tệp layout row_category
-
         binding = RowCategoryBinding.inflate(LayoutInflater.from(context), parent, false)
         return HolderCategory(binding.root)
 
     }
 
     override fun onBindViewHolder(holder: HolderCategory, position: Int) {
-        /*Get data, Set data, Handle clicks, etc --- */
+        //hàm này được gọi khi RecylcleView cần thiết lập dữ liệu và xử lý sự kiện cho 1 ViewHolder
 
-        // get data
+        // lấy dữ liệu
         var model = categoryArrayList[position]
         var id = model.id
         var category = model.category
         val timestamp = model.timestamp
         val uid = model.uid
 
-        // set data
+        // thiết lập dữ liệu cho các View Component
         holder.categoryTv.text = category
 
-        // handler click, delete category
+        // nút xóa
         holder.deleteBtn.setOnClickListener {
-            // confirm before delete
+            // confirm trước khi xóa
             val builder = AlertDialog.Builder(context)
             builder.setTitle("Delete")
                 .setMessage("Are you sure you want to delete this category")
@@ -65,25 +64,25 @@ class AdapterCategory : RecyclerView.Adapter<AdapterCategory.HolderCategory>, Fi
                 .show()
         }
 
-        // handle click, start pdf list admin activity, also pas pdf id, title
+        // khi người dùng nhấn vào 1 mục trong các danh mục đó
         holder.itemView.setOnClickListener{
             val intent = Intent(context, PdfListAdminActivity::class.java)
+            //2 thông tin được truyền vào là ID và tên của thể loại
             intent.putExtra("categoryId", id)
             intent.putExtra("category", category)
-            context.startActivity(intent)
-
+            context.startActivity(intent) // khởi chạy PdfListAdminActivity và chuyển các thông tin đã được truyền vào Intent.
         }
     }
 
     private fun deleteCategory(model: ModelCategory, holder: HolderCategory) {
-        // get id of category to delete
+        // lấy id của thể loại cần xóa
         val id = model.id
 
-        // firebase db > categories > categoryId
+        // tham chiếu đến nút "Categories' trong FRD
         val ref = FirebaseDatabase.getInstance().getReference("Categories")
+        //dùng hàm RemoveValue để xóa dữ liệu
         ref.child(id).removeValue().addOnSuccessListener {
             Toast.makeText(context, "Deleted...", Toast.LENGTH_SHORT).show()
-
         }.addOnFailureListener { e ->
             Toast.makeText(context, "Unable to delete due to ${e.message}...", Toast.LENGTH_SHORT)
                 .show()
@@ -94,23 +93,24 @@ class AdapterCategory : RecyclerView.Adapter<AdapterCategory.HolderCategory>, Fi
 
 
     override fun getItemCount(): Int {
-        return categoryArrayList.size // number of items in list
+        return categoryArrayList.size // số lượng thể loại trong danh sách
     }
 
 
-    // ViewHolder class to hold/ init UI views for row_category.xml
+    // quản lý các view cho mỗi mục item trong recycleView -  layout row_category.xml
     inner class HolderCategory(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // init ui views
+        // khởi tạo các view
         var categoryTv: TextView = binding.categoryTv
         var deleteBtn: ImageButton = binding.deleteBtn
 
     }
 
+    //lọc dữ liệu
     override fun getFilter(): Filter {
-        if (filter == null) {
+        if (filter == null) { // kiểm tra xem có null hay không
+            //khởi tạo một đối tượng FilterCategory mới, truyền vào đó danh sách filterList và chính adapter này
             filter = FilterCategory(filterList, this)
         }
-
         return filter as FilterCategory
     }
 
