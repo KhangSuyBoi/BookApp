@@ -66,7 +66,7 @@ class RegisterActivity : AppCompatActivity() {
 
         // 2) Xác thực dữ liệu người dùng
         if (name.isEmpty())
-            //hiển thị thông báo nhỏ - Nếu không nhập Tên
+        //hiển thị thông báo nhỏ - Nếu không nhập Tên
             Toast.makeText(this, "Enter your name ...", Toast.LENGTH_SHORT).show()
         else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             //Kiểm tra email đúng định dạng không
@@ -128,7 +128,7 @@ class RegisterActivity : AppCompatActivity() {
 
         // lưu  thông tin người dùng vào FRD
         val ref = FirebaseDatabase.getInstance().getReference("Users")
-            // tham chiếu vào nút Users
+        // tham chiếu vào nút Users
 
         // lưu thông tin người dùng vào nút Users và uid là khóa chính
         ref.child(uid!!).setValue(hashMap).addOnSuccessListener {

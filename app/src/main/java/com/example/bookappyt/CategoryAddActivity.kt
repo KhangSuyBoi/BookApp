@@ -15,13 +15,13 @@ import com.google.firebase.ktx.Firebase
 
 class CategoryAddActivity : AppCompatActivity() {
 
-    // view binding
+    // view
     private lateinit var binding: ActivityCategoryAddBinding
 
-    // firebase auth
+    //  xác thực firebase auth
     private lateinit var firebaseAuth: FirebaseAuth
 
-    // progress dialog
+    // hộp thoại
     private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,40 +29,37 @@ class CategoryAddActivity : AppCompatActivity() {
         binding = ActivityCategoryAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // init firebase auth
+        // khởi tạo firebase auth
         firebaseAuth = FirebaseAuth.getInstance()
 
-        // configure progress dialog
+        // hộp thoại
         progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please wait")
         progressDialog.setCanceledOnTouchOutside(false)
 
-        // handle click, go back
+        // nút Back
         binding.backBtn.setOnClickListener{
             onBackPressed()
         }
 
-        // handle click, begn upload category
+        // nút submit
         binding.submitBtn.setOnClickListener {
-            validateData()
+            validateData() //xác thực dữ liệu đầu vào
         }
     }
 
     private var category = ""
     private fun validateData() {
-        /*Before adding validate data*/
-        // get data
+        /*Trước khi thêm dữ liệu*/
+        // lấy dữ liệu
         category = binding.categoryEt.text.toString().trim()
 
-        // validate if not empty
+        // nếu trống
         if (category.isEmpty()) {
             Toast.makeText(this, "Please enter category...!", Toast.LENGTH_SHORT).show()
-
         } else {
             addCategoryFirebase()
         }
-
-
     }
 
     private fun addCategoryFirebase() {
@@ -70,21 +67,20 @@ class CategoryAddActivity : AppCompatActivity() {
         progressDialog.setMessage("Adding category...")
         progressDialog.show()
 
-        // get timestamp
+        // lấy mốc thời gian
         val timestamp = System.currentTimeMillis()
 
-        // setup data to add in firebase db
         val hashMap: HashMap<String, Any?> = HashMap()
-
+        // tạo ra 1 hashMap chứ các cặp Key : Value
         hashMap["id"] = "$timestamp"
         hashMap["category"] = "$category"
         hashMap["timestamp"] = timestamp
         hashMap["uid"] = "${firebaseAuth.uid}"
 
-        // add to firebase db .... Database Root > Categories > categoryId > category info
+        // Tham chiếu đến nút Categories
         val ref = FirebaseDatabase.getInstance().getReference("Categories")
-        ref.child("$timestamp").setValue(hashMap).addOnSuccessListener {
-            // category add success
+        ref.child("$timestamp").setValue(hashMap).addOnSuccessListener { //thêm dữ liệu
+            //nếu add được
             progressDialog.dismiss()
             Toast.makeText(
                 this,
@@ -92,7 +88,7 @@ class CategoryAddActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT
             ).show()
         }.addOnFailureListener { e ->
-            // category add failed
+            // nếu fail failed
             progressDialog.dismiss()
             Toast.makeText(
                 this,
@@ -101,7 +97,5 @@ class CategoryAddActivity : AppCompatActivity() {
             ).show()
 
         }
-
-
     }
 }
