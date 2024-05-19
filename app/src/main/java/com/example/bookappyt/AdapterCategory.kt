@@ -14,15 +14,13 @@ import com.google.firebase.ktx.Firebase
 
 class AdapterCategory : RecyclerView.Adapter<AdapterCategory.HolderCategory>, Filterable {
 
-    private val context: Context
+    private val context: Context // hoạt động liên quan đến người dùng
     public var categoryArrayList: ArrayList<ModelCategory>
-    private var filterList: ArrayList<ModelCategory>
+    private var filterList: ArrayList<ModelCategory> //bản sao của categoryList -> sử dụng cho mục đích lọc
+    private var filter: FilterCategory? = null //-> triển khai bộ lọc một cách tùy chỉnh
+    private lateinit var binding: RowCategoryBinding // liên kết với các phẩn tử giao diện
 
-    private var filter: FilterCategory? = null
-
-    private lateinit var binding: RowCategoryBinding
-
-    // constructor
+    // hàm khởi tạo
     constructor(context: Context, categoryArrayList: ArrayList<ModelCategory>) {
         this.context = context
         this.categoryArrayList = categoryArrayList
@@ -30,10 +28,11 @@ class AdapterCategory : RecyclerView.Adapter<AdapterCategory.HolderCategory>, Fi
     }
 
 
+    //tạo view holder cho RecycleView (hiển thị các mục có thể tái sử dụng các view được tạo ra trước đó -> tối ưu)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HolderCategory {
-        // inflate/bind row_category.xml
+        // tạo ra 1 đối tượng RCB từ tệp layout row_category
+        
         binding = RowCategoryBinding.inflate(LayoutInflater.from(context), parent, false)
-
         return HolderCategory(binding.root)
 
     }

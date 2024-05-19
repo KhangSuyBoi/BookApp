@@ -23,29 +23,22 @@ import com.google.firebase.database.ValueEventListener
 
 
 class DashboardAdminActivity : AppCompatActivity() {
-    // name of the chosen song
-    private var songName: String = "raw/autumn"
-
-    // view binding
+    // view binding - dùng để tương tác với các view trong layout
     private lateinit var binding: ActivityDashboardAdminBinding
 
-    // firebase auth
+    // xác thực firebase auth
     private lateinit var firebaseAuth: FirebaseAuth
 
-    // arraylist to hold categories
+    // mảng để lưu trữ các thể loại
     private lateinit var categoryArraylist: ArrayList<ModelCategory>
 
-    // adapter
+    // biến chuyển đổi
     private lateinit var adapterCategory: AdapterCategory
 
-    // media player
-    var mMediaPlayer: MediaPlayer? = null
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        // tương tự với Main Activity
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardAdminBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
 
         firebaseAuth = FirebaseAuth.getInstance()
@@ -53,147 +46,75 @@ class DashboardAdminActivity : AppCompatActivity() {
         checkUser()
         loadCategories()
 
-        val arraySpinner = arrayOf(
-            "Autumn", "Norwegian_Wood", "Moonswept"
-        )
-
-        val adapter = ArrayAdapter(
-            this,
-            simple_spinner_item, arraySpinner
-        )
-        adapter.setDropDownViewResource(simple_spinner_dropdown_item)
-        binding.spinnerSong.adapter = adapter
-        binding.spinnerSong.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-
-                Log.d("MEDIA PLAYER", "set song: ${arraySpinner[position]}")
-                songName = "raw/" + arraySpinner[position].lowercase()
-                stopSound()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
-
-
-        // search
+        // xử lý các sự kiện khi ấn vào nút Seảrch
         binding.searchEt.addTextChangedListener(object : TextWatcher {
+            // phương thức này sẽ được gọi mỗi khi nội dung của EditText thay đổi
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                /*
+                s: CharSequence?: Đây là văn bản mới được nhập vào EditText.
+                start: Int: Vị trí bắt đầu của văn bản thay đổi.
+                before: Int: Số ký tự đã bị xóa trước khi văn bản thay đổi.
+                count: Int: Số ký tự mới được thêm vào.
+                */
                 try {
-                    adapterCategory.filter.filter(s)
-
+                    adapterCategory.filter.filter(s) //cố gọi phương thức filer và truyền vào giá trị s
                 } catch (e: Exception) {
 
                 }
             }
-
+            // trước khi thay đổi
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
             }
-
+            //sau khi
             override fun afterTextChanged(s: Editable?) {
 
             }
         })
 
 
-        // handle click, log out
+        // xử lý các sự kiện khi nhấn vào nút Log Out
         binding.logoutBtn.setOnClickListener {
-
             firebaseAuth.signOut()
             checkUser()
         }
 
-
-
-        binding.playBtn.setOnClickListener {
-            if (mMediaPlayer == null || !mMediaPlayer!!.isPlaying) {
-                playSound()
-            } else {
-                pauseSound()
-            }
-        }
-
-        // handle click start category add screen
-        /* binding.addCategoryBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(DashboardAdminActivity.this, CategoryAddActivity.class))
-            }
-         });*/
-
+        // xử lý các sự kiện khi nhấn vào nút Add và chuyển sang CategoryAdd
         binding.addCategoryBtn.setOnClickListener {
             startActivity(Intent(this, CategoryAddActivity::class.java))
         }
 
 
-        // handle click, start add pdf page
+        // tương tự như trên
         binding.addPdfFab.setOnClickListener{
             startActivity(Intent(this,PdfAddActivity::class.java))
 
         }
     }
 
-    // 1. Plays the water sound
-    @SuppressLint("DiscouragedApi")
-    fun playSound() {
-        if (mMediaPlayer == null) {
-            Log.d("MEDIA PLAYER", "song to play: $songName")
-            mMediaPlayer = MediaPlayer.create(this, this.resources.getIdentifier(songName, "id", this.packageName))
-            mMediaPlayer!!.isLooping = true
-            mMediaPlayer!!.start()
-        } else mMediaPlayer!!.start()
-    }
-
-    // 2. Pause playback
-    fun pauseSound() {
-        if (mMediaPlayer?.isPlaying == true) mMediaPlayer?.pause()
-    }
-
-    // 3. Stops playback
-    fun stopSound() {
-        if (mMediaPlayer != null) {
-            mMediaPlayer!!.stop()
-            mMediaPlayer!!.release()
-            mMediaPlayer = null
-        }
-    }
-
-    // 4. Destroys the MediaPlayer instance when the app is closed
-    override fun onDestroy() {
-        super.onDestroy()
-        if (mMediaPlayer != null) {
-            mMediaPlayer!!.release()
-            mMediaPlayer = null
-        }
-    }
-
     private fun loadCategories() {
-        // init arraylist
+        // khởi tạo arraylist
         categoryArraylist = ArrayList()
 
-        // get all categories from firebase database... Firebase db < categories
+        //lấy hết các dữ liệu từ nút 'Categories' trong FB
         val ref = FirebaseDatabase.getInstance().getReference("Categories")
 
+        //lắng nghe thay đổi trong dữ liệu
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // clear list before starting adding data into it
+                // clear list cũ trước khi bắt đầu thêm data vào
                 categoryArraylist.clear()
                 for (ds in snapshot.children) {
-                    // get data as model
+                    // chạy vòng lặp qua mỗi snapshot con và chuyển nó thành các đối tượng ModelCategory
                     val model = ds.getValue(ModelCategory::class.java)
-                    // add to arraylist
+                    // thêm các đối tượng ModelCategory vào List đó
                     categoryArraylist.add(model!!)
                 }
 
-                // setup adapter
+                // một AdapterCategory mới được khởi tạo với categoryArraylist làm dữ liệu nguồn.
                 adapterCategory = AdapterCategory(this@DashboardAdminActivity, categoryArraylist)
 
-                // set adapter to recyclerview
+                // hiển thị danh sách các thể loại
                 binding.categoriesRv.adapter = adapterCategory
             }
 
@@ -207,14 +128,13 @@ class DashboardAdminActivity : AppCompatActivity() {
         /// get current user
         val firebaseUser = firebaseAuth.currentUser
         if (firebaseUser == null) {
-            // not logged in, goto main screen
+            // không login thì chuyển đến màn hình Main Act
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         } else {
-            // logged in, get and show user info
+            //nếu có đăng nhập
             val email = firebaseUser.email
-
-            // set to textview of toolbar
+            // hiển thị email của Admin lên trên thanh toolbar
             binding.subTitleTv.text = email
 
         }
