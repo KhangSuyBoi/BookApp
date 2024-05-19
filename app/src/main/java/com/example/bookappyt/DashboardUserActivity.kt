@@ -49,30 +49,9 @@ class DashboardUserActivity : AppCompatActivity() {
         checkUser()
 
 
-        val arraySpinner = arrayOf(
-            "Autumn", "Norwegian_Wood", "Moonswept"
-        )
 
-        val adapter = ArrayAdapter(
-            this,
-            R.layout.simple_spinner_item, arraySpinner
-        )
-        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-        binding.spinnerSong.adapter = adapter
-        binding.spinnerSong.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                Log.d("MEDIA PLAYER", "set song: ${arraySpinner[position]}")
-                songName = "raw/" + arraySpinner[position].lowercase()
-                stopSound()
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
+
 
         setupWithViewPagerAdapter(binding.viewPager)
         binding.tabLayout.setupWithViewPager(binding.viewPager)
@@ -83,13 +62,7 @@ class DashboardUserActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.playBtn.setOnClickListener {
-            if (mMediaPlayer == null || !mMediaPlayer!!.isPlaying) {
-                playSound()
-            } else {
-                pauseSound()
-            }
-        }
+
 
     }
 

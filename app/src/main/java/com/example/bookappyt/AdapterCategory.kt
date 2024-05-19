@@ -31,7 +31,7 @@ class AdapterCategory : RecyclerView.Adapter<AdapterCategory.HolderCategory>, Fi
     //tạo view holder cho RecycleView (hiển thị các mục có thể tái sử dụng các view được tạo ra trước đó -> tối ưu)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HolderCategory {
         // tạo ra 1 đối tượng RCB từ tệp layout row_category
-        
+
         binding = RowCategoryBinding.inflate(LayoutInflater.from(context), parent, false)
         return HolderCategory(binding.root)
 

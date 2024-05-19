@@ -11,58 +11,61 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class SplashActivity : AppCompatActivity() {
-    /*
-    * 1) Kiểm tra xem người dùng đó có log in chưa
-    * 2) Xem là "user" hay "admin"
-    * */
 
     private lateinit var firebaseAuth: FirebaseAuth
 
-    //hàm khởi tạo Activity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)//thiết lập giao diện bằng layout activity_splash
+        setContentView(R.layout.activity_splash)
 
-        firebaseAuth = FirebaseAuth.getInstance() //lấy 1 instance
+        firebaseAuth = FirebaseAuth.getInstance()
 
-        Handler().postDelayed(Runnable { // gửi và xử lí thông điệp
-            checkUser() // chạy hàm này sau 2s
-        }, 2000) // 2s
+        Handler().postDelayed(Runnable {
+                                       checkUser()
+//            startActivity(Intent(this, MainActivity::class.java))
+
+        }, 2000) // means 2 seconds
+
+
     }
 
-    private fun checkUser() { // xem người dùng hiện tại là ai và chuyển đến màn hình phù hợp
-        //kiểm tra trạng thái đăng nhập và xem là admin hay user
-        val firebaseUser = firebaseAuth.currentUser //lấy thông tin về người dùng hiện tại
-
-        //kiểm tra có đang đăng nhập không
+    private fun checkUser() {
+        // get current user, if logged in or not
+        val firebaseUser = firebaseAuth.currentUser
         if (firebaseUser == null)
         {
-            // nếu không có ai -> MainActivty
+            // user not logged in, goto main screen
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
         else{
-            // nếu có đăng nhập thì phải kiểm tra loại người dùng (admin/user)
+            // user logged in, check user type, same as done in login screen
             val ref = FirebaseDatabase.getInstance().getReference("Users")
-            // cho phép truy cập và tham chiếu đến 1 nút cụ thể - nút Users trong cơ sở dữ liệu
-            ref.child(firebaseUser.uid) // lấy thông tin về người dùng hiện tại userid
-
-                //lắng nghe sự kiện khi thông tin người dùng tải về thành công
+            ref.child(firebaseUser.uid)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
 
-                    override fun onDataChange(snapshot: DataSnapshot) { //kiểm tra giá trị của user
-                        // xem thử là "user" hay "admin" trong userType
+
+                    override fun onDataChange(snapshot: DataSnapshot) {
+
+                        // get user type e.g. user or admin
                         val userType = snapshot.child("userType").value
+
                         if (userType == "user") {
-                            //nếu là user -> chuyển đến trang dashboard của user
+
+                            // its simple user, open user dashboard
                             startActivity(Intent(this@SplashActivity, DashboardUserActivity::class.java))
                             finish()
-                        } else if (userType == "admin") { //tương tự như admin
+
+                        } else if (userType == "admin") {
+
+                            // its admin, open admin dashboard
                             startActivity(Intent(this@SplashActivity, DashboardAdminActivity::class.java))
                             finish()
 
                         }
                     }
+
+
                     override fun onCancelled(error: DatabaseError) {
 
                     }
@@ -70,3 +73,7 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 }
+/*Keep user logged in
+* 1) Check if user logged in
+* 2) Check type of users
+* */
