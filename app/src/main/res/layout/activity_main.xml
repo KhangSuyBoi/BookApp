@@ -8,53 +8,47 @@
     android:background="@drawable/back1"
     tools:context=".MainActivity">
 
-    <RelativeLayout
-        android:layout_width="391dp"
-        android:layout_height="711dp"
-        android:background="@color/black_translucent">
-
-        <ImageView
-            android:id="@+id/iconIv"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:src="@drawable/logocopywhite" />
+    <ImageView
+        android:id="@+id/iconIv"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/logocopywhite" />
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/iconIv"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:text="Welcome to Book App"
-            android:textColor="@android:color/white"
-            android:textSize="28dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iconIv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Welcome to Book App"
+        android:textColor="@android:color/background_dark"
+        android:textSize="28dp" />
 
-        <!--Button Login-->
-        <Button
-            android:id="@+id/loginBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/skipBtn"
-            android:layout_marginBottom="10dp"
-            android:backgroundTint="@color/purple_500"
-            android:padding="15dp"
-            android:text="Login"
-            android:textColor="@color/white"
-            android:textStyle="bold" />
+    <!--Button Login-->
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/skipBtn"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/purple_500"
+        android:padding="15dp"
+        android:text="Login"
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/skipBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:backgroundTint="@android:color/transparent"
-            android:padding="12dp"
-            android:strokeColor="@color/teal"
-            android:text="Continue without login"
-            android:textColor="@color/purple_500" />
-    </RelativeLayout>
+    <Button
+        android:id="@+id/skipBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@android:color/transparent"
+        android:padding="12dp"
+        android:strokeColor="@color/teal"
+        android:text="Continue without login"
+        android:textColor="@color/purple_500" />
 
 </RelativeLayout>

@@ -23,9 +23,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class DashboardUserActivity : AppCompatActivity() {
-    // name of the chosen song
-    private var songName: String = "raw/autumn"
-
     // view binding
     private lateinit var binding: ActivityDashboardUserBinding
 
@@ -49,30 +46,7 @@ class DashboardUserActivity : AppCompatActivity() {
         checkUser()
 
 
-        val arraySpinner = arrayOf(
-            "Autumn", "Norwegian_Wood", "Moonswept"
-        )
 
-        val adapter = ArrayAdapter(
-            this,
-            R.layout.simple_spinner_item, arraySpinner
-        )
-        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
-        binding.spinnerSong.adapter = adapter
-        binding.spinnerSong.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                Log.d("MEDIA PLAYER", "set song: ${arraySpinner[position]}")
-                songName = "raw/" + arraySpinner[position].lowercase()
-                stopSound()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
 
         setupWithViewPagerAdapter(binding.viewPager)
         binding.tabLayout.setupWithViewPager(binding.viewPager)
@@ -83,49 +57,10 @@ class DashboardUserActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.playBtn.setOnClickListener {
-            if (mMediaPlayer == null || !mMediaPlayer!!.isPlaying) {
-                playSound()
-            } else {
-                pauseSound()
-            }
-        }
+
 
     }
 
-    // 1. Plays the water sound
-    @SuppressLint("DiscouragedApi")
-    fun playSound() {
-        if (mMediaPlayer == null) {
-            Log.d("MEDIA PLAYER", "song to play: $songName")
-            mMediaPlayer = MediaPlayer.create(this, this.resources.getIdentifier(songName, "id", this.packageName))
-            mMediaPlayer!!.isLooping = true
-            mMediaPlayer!!.start()
-        } else mMediaPlayer!!.start()
-    }
-
-    // 2. Pause playback
-    fun pauseSound() {
-        if (mMediaPlayer?.isPlaying == true) mMediaPlayer?.pause()
-    }
-
-    // 3. Stops playback
-    fun stopSound() {
-        if (mMediaPlayer != null) {
-            mMediaPlayer!!.stop()
-            mMediaPlayer!!.release()
-            mMediaPlayer = null
-        }
-    }
-
-    // 4. Destroys the MediaPlayer instance when the app is closed
-    override fun onDestroy() {
-        super.onDestroy()
-        if (mMediaPlayer != null) {
-            mMediaPlayer!!.release()
-            mMediaPlayer = null
-        }
-    }
 
 
     private fun setupWithViewPagerAdapter(viewPager: ViewPager) {

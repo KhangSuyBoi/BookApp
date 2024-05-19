@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/back1"
     tools:context=".PdfDetailActivity">
 
     <RelativeLayout
@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_toolbar02">
-
 
         <!--Back button-->
         <ImageButton
@@ -40,37 +39,43 @@
         android:layout_width="match_parent"
         android:padding="10dp"
         android:layout_below="@id/toolbarRl"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/black_translucent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <!--BookInfo-->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
                 <!--Book Preview-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <RelativeLayout
                     android:id="@+id/pdfRl"
-                    android:layout_width="110dp"
-                    android:layout_height="150dp"
-                    android:layout_marginEnd="5dp"
-                    android:background="@color/gray02">
+                    android:layout_width="210dp"
+                    android:layout_height="280dp">
 
                     <!--PdfView-->
                     <com.github.barteksc.pdfviewer.PDFView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/pdfView"/>
+                        android:id="@+id/pdfView"
+                        android:layout_width="210dp"
+                        android:layout_height="280dp"
+                        android:layout_centerHorizontal="true" />
 
                     <!--ProgressBar-->
                     <ProgressBar
                         android:id="@+id/progressBar"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent" />
 
                 </RelativeLayout>
+
+            </LinearLayout>
 
                 <!--Book Title-->
                 <TextView
@@ -78,13 +83,18 @@
                     style="@style/TextAppearance.MaterialComponents.Headline6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_toEndOf="@id/pdfRl"
-                    android:text="Book Title"/>
+                    android:text="Book Title"
+                    android:textSize="30dp"
+                    android:textColor="@color/white"/>
 
                 <!--Table-->
                 <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingTop="5dp"
                     android:layout_below="@id/titleTv"
                     android:layout_toEndOf="@id/pdfRl">
 
@@ -95,7 +105,9 @@
                             style="@style/TextAppearance.MaterialComponents.Caption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Category"/>
+                            android:text="Category:"
+                            android:textSize="20dp"
+                            android:textColor="@color/white"/>
 
                         <TextView
                             android:id="@+id/categoryTv"
@@ -104,6 +116,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="N/A"
+                            android:textSize="15dp"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="5dp"/>
                     </TableRow>
 
@@ -115,7 +129,9 @@
                             style="@style/TextAppearance.MaterialComponents.Caption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Date"
+                            android:text="Date:"
+                            android:textSize="20dp"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="5dp"/>
 
                         <TextView
@@ -125,6 +141,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="N/A"
+                            android:textSize="15dp"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="5dp"/>
                     </TableRow>
 
@@ -136,7 +154,9 @@
                             style="@style/TextAppearance.MaterialComponents.Caption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Size"
+                            android:text="Size:"
+                            android:textSize="20dp"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="5dp"/>
 
                         <TextView
@@ -146,6 +166,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="N/A"
+                            android:textSize="15dp"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="5dp"/>
                     </TableRow>
 
@@ -156,7 +178,9 @@
                             style="@style/TextAppearance.MaterialComponents.Caption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="View"
+                            android:text="View:"
+                            android:textSize="20dp"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="5dp"/>
 
                         <TextView
@@ -166,6 +190,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="N/A"
+                            android:textSize="15dp"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="5dp"/>
                     </TableRow>
 
@@ -176,7 +202,9 @@
                             style="@style/TextAppearance.MaterialComponents.Caption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Downloads"
+                            android:text="Downloads:"
+                            android:textSize="20dp"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="5dp"/>
 
                         <TextView
@@ -186,6 +214,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="N/A"
+                            android:textSize="15dp"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="5dp"/>
                     </TableRow>
 
@@ -196,7 +226,9 @@
                             style="@style/TextAppearance.MaterialComponents.Caption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Pages"
+                            android:text="Pages:"
+                            android:textSize="20dp"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="5dp"/>
 
                         <TextView
@@ -206,20 +238,22 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="N/A"
+                            android:textSize="15dp"
+                            android:textColor="@color/white"
                             android:layout_marginEnd="5dp"/>
                     </TableRow>
 
                 </TableLayout>
 
-            </RelativeLayout>
             <!-- Book description-->
             <TextView
                 android:id="@+id/descriptionTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:text="The description of the book."
-                android:textColor="@color/black"/>
+                android:textSize="17dp"
+                android:textColor="@color/white"/>
         </LinearLayout>
     </ScrollView>
 
@@ -230,7 +264,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:background="@color/design_default_color_primary">
+        android:background="@color/purple_500">
 
         <!--Button: read book-->
         <Button
@@ -239,7 +273,8 @@
             android:layout_height="wrap_content"
             android:text="Read"
             android:drawableTop="@drawable/ic_book_white"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:backgroundTint="@color/purple_1000"/>
 
         <!--Button: download book-->
         <Button
@@ -248,7 +283,8 @@
             android:layout_height="wrap_content"
             android:text="Download"
             android:drawableTop="@drawable/ic_download_white"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:backgroundTint="@color/purple_1000"/>
 
     </LinearLayout>
 </RelativeLayout>
