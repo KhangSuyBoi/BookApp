@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/back1"
     tools:context=".CategoryAddActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="270dp"
-        android:background="@drawable/shape_toolbar01">
+        android:layout_height="match_parent"
+        android:background="@color/black_translucent">
         <!--BackButton-->
         <ImageButton
             android:id="@+id/backBtn"
@@ -22,8 +23,8 @@
 
         <ImageView
             android:id="@+id/iconIv"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/backBtn"
             android:src="@drawable/logocopywhite" />
@@ -37,47 +38,55 @@
             android:fontFamily="sans-serif-condensed"
             android:text="Add a new Category"
             android:textColor="@color/white"
-            android:textSize="28sp" />
+            android:textSize="30sp" />
 
 
     </RelativeLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/categoryTil"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginStart="30dp"
         android:layout_marginTop="300dp"
-        android:layout_marginEnd="30dp"
-        app:hintEnabled="false">
-
-        <EditText
-            android:id="@+id/categoryEt"
+        android:layout_marginEnd="30dp">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_edittext01"
-            android:drawableStart="@drawable/ic_category_gray"
-            android:drawablePadding="10dp"
-            android:hint="Category Title"
-            android:inputType="textPersonName|textCapWords"
-            android:padding="10dp"
-            android:textColor="@color/black"
-            android:textColorHint="@color/gray01" />
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/categoryTil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:hintEnabled="false">
 
-    </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    android:id="@+id/categoryEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_edittext01"
+                    android:drawableStart="@drawable/ic_category_gray"
+                    android:drawablePadding="10dp"
+                    android:hint="Category Title"
+                    android:inputType="textPersonName|textCapWords"
+                    android:padding="10dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray01" />
 
-    <!--    Add category button-->
-    <Button
-        android:id="@+id/submitBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/shape_button01"
-        android:text="Submit"
-        android:layout_below="@+id/categoryTil"
-        android:textColor="@color/white"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--    Add category button-->
+            <Button
+                android:id="@+id/submitBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/purple_500"
+                android:padding="15dp"
+                android:text="Submit"
+                android:layout_below="@+id/categoryTil"
+                android:textColor="@color/white"/>
+        </RelativeLayout>
+    </ScrollView>
+
+
 
 
 </RelativeLayout>

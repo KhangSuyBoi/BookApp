@@ -4,15 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/back1"
     tools:context=".DashboardAdminActivity">
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_translucent" />
 
     <!--Toolbar-->
     <RelativeLayout
         android:id="@+id/toolbarRl"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
-        android:background="@drawable/shape_toolbar02">
+        android:background="@color/purple_200">
 
         <TextView
             android:id="@+id/titleTv"
@@ -43,27 +47,6 @@
             android:background="@android:color/transparent"
             android:src="@drawable/ic_logout_white" />
 
-        <ImageButton
-            android:id="@+id/playBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:background="@android:color/transparent"
-            android:src="@drawable/ic_media_play" />
-
-        <Spinner
-            android:id="@+id/spinner_song"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/playBtn"
-            android:theme="@style/Theme.Material3.Dark"
-            android:popupTheme="@style/Theme.Material3.Dark"
-            android:spinnerMode="dropdown"/>
-
-
     </RelativeLayout>
 
     <!--Search-->
@@ -87,12 +70,14 @@
         android:id="@+id/categoriesRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/searchEt"
         android:layout_above="@id/bottomLl"
-        android:layout_margin="5dp"
-        tools:listitem="@layout/row_category"
+        android:layout_below="@+id/searchEt"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        />
+        tools:listitem="@layout/row_category" />
 
 
     <LinearLayout
@@ -106,13 +91,14 @@
         android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
+
         <Button
             android:id="@+id/addCategoryBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_button01"
+            android:backgroundTint="@color/purple_500"
             android:minHeight="50dp"
             android:text="+ Add Category"
             android:textAllCaps="false"
@@ -129,6 +115,7 @@
 
 
     </LinearLayout>
+
 
 
 </RelativeLayout>
