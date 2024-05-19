@@ -8,28 +8,31 @@ import com.example.bookappyt.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    // view binding
+    // view binding - cho phép truy cập và tương tác với các view (button, text,...)
     private lateinit var binding: ActivityMainBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-//        setContentView(R.layout.activity_main)
-        // TODO check documentation on view binding on android docs
-        setContentView(binding.root)
 
-        // handle click, login
+    // hàm khởi tạo nhưng vẫn lưu lại các trang thái trước đó nếu như Activity bị hủy (back/ xoay ngang), lưu thông tin đó vào Bundle
+    override fun onCreate(savedInstanceState: Bundle?) {
+        // đảm bảo rằng các logic khởi tạo cơ bản của Activity được thực hiện đúng cách.
+        super.onCreate(savedInstanceState)
+        //truy cập các view trong layout của activity này
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        // TODO check documentation on view binding on android docs
+        setContentView(binding.root) //thiết lập nội dung của Act bằng layout cuả Act đó
+        //biding.root đại diện cho gốc layout
+
+        // Thiết lập sự kiện cho nút Login Button
         binding.loginBtn.setOnClickListener {
-            // will do later
+            // Khởi chạy 1 Intent để chuyển sang màn hình Login
+            //Intent này có chứa 1 số dữ liệu và giúp giao tiếp giữa các thành phần ( vd: Act này với Act khác)
             startActivity(Intent(this, LoginActivity::class.java))
         }
 
-        // handle click, skip and continue to main screen
+        // Thiết lập sự kiện cho nút Skip Button
         binding.skipBtn.setOnClickListener {
-            // will do later
+            // khởi tạo Intent và chuyển sang 1 màn hình User trang chủ
             startActivity(Intent(this, DashboardUserActivity::class.java))
         }
-
-        // now lets connect with firebase
     }
 }
