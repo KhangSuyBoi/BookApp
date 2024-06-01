@@ -48,7 +48,7 @@
             android:orientation="vertical">
             <!--BookInfo-->
 
-                <!--Book Preview-->
+            <!--Book Preview-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -77,173 +77,173 @@
 
             </LinearLayout>
 
-                <!--Book Title-->
-                <TextView
-                    android:id="@+id/titleTv"
-                    style="@style/TextAppearance.MaterialComponents.Headline6"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toEndOf="@id/pdfRl"
-                    android:text="Book Title"
-                    android:textSize="30dp"
-                    android:textColor="@color/white"/>
+            <!--Book Title-->
+            <TextView
+                android:id="@+id/titleTv"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@id/pdfRl"
+                android:text="Book Title"
+                android:textSize="30dp"
+                android:textColor="@color/white"/>
 
-                <!--Table-->
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="5dp"
-                    android:layout_below="@id/titleTv"
-                    android:layout_toEndOf="@id/pdfRl">
+            <!--Table-->
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:layout_below="@id/titleTv"
+                android:layout_toEndOf="@id/pdfRl">
 
-                    <!--Category Row-->
-                    <TableRow>
-                        <TextView
-                            android:id="@+id/categoryLabelTv"
-                            style="@style/TextAppearance.MaterialComponents.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Category:"
-                            android:textSize="20dp"
-                            android:textColor="@color/white"/>
+                <!--Category Row-->
+                <TableRow>
+                    <TextView
+                        android:id="@+id/categoryLabelTv"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Category:"
+                        android:textSize="20dp"
+                        android:textColor="@color/white"/>
 
-                        <TextView
-                            android:id="@+id/categoryTv"
-                            android:layout_weight="1"
-                            style="@style/TextAppearance.MaterialComponents.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="N/A"
-                            android:textSize="15dp"
-                            android:textColor="@color/white"
-                            android:layout_marginEnd="5dp"/>
-                    </TableRow>
+                    <TextView
+                        android:id="@+id/categoryTv"
+                        android:layout_weight="1"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="5dp"/>
+                </TableRow>
 
-                    <!--Date Row-->
-                    <TableRow android:layout_marginTop="5dp">
+                <!--Date Row-->
+                <TableRow android:layout_marginTop="5dp">
 
-                        <TextView
-                            android:id="@+id/dateLabelTv"
-                            style="@style/TextAppearance.MaterialComponents.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Date:"
-                            android:textSize="20dp"
-                            android:textColor="@color/white"
-                            android:layout_marginEnd="5dp"/>
+                    <TextView
+                        android:id="@+id/dateLabelTv"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Date:"
+                        android:textSize="20dp"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="5dp"/>
 
-                        <TextView
-                            android:id="@+id/dateTv"
-                            android:layout_weight="1"
-                            style="@style/TextAppearance.MaterialComponents.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="N/A"
-                            android:textSize="15dp"
-                            android:textColor="@color/white"
-                            android:layout_marginEnd="5dp"/>
-                    </TableRow>
+                    <TextView
+                        android:id="@+id/dateTv"
+                        android:layout_weight="1"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="5dp"/>
+                </TableRow>
 
-                    <!--Size Row-->
-                    <TableRow android:layout_marginTop="5dp">
+                <!--Size Row-->
+                <TableRow android:layout_marginTop="5dp">
 
-                        <TextView
-                            android:id="@+id/sizeLabelTv"
-                            style="@style/TextAppearance.MaterialComponents.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Size:"
-                            android:textSize="20dp"
-                            android:textColor="@color/white"
-                            android:layout_marginEnd="5dp"/>
+                    <TextView
+                        android:id="@+id/sizeLabelTv"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Size:"
+                        android:textSize="20dp"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="5dp"/>
 
-                        <TextView
-                            android:id="@+id/sizeTv"
-                            android:layout_weight="1"
-                            style="@style/TextAppearance.MaterialComponents.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="N/A"
-                            android:textSize="15dp"
-                            android:textColor="@color/white"
-                            android:layout_marginEnd="5dp"/>
-                    </TableRow>
+                    <TextView
+                        android:id="@+id/sizeTv"
+                        android:layout_weight="1"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="5dp"/>
+                </TableRow>
 
-                    <!--Views Count Row-->
-                    <TableRow android:layout_marginTop="5dp">
-                        <TextView
-                            android:id="@+id/viewsLabelTv"
-                            style="@style/TextAppearance.MaterialComponents.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="View:"
-                            android:textSize="20dp"
-                            android:textColor="@color/white"
-                            android:layout_marginEnd="5dp"/>
+                <!--Views Count Row-->
+                <TableRow android:layout_marginTop="5dp">
+                    <TextView
+                        android:id="@+id/viewsLabelTv"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View:"
+                        android:textSize="20dp"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="5dp"/>
 
-                        <TextView
-                            android:id="@+id/viewTv"
-                            android:layout_weight="1"
-                            style="@style/TextAppearance.MaterialComponents.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="N/A"
-                            android:textSize="15dp"
-                            android:textColor="@color/white"
-                            android:layout_marginEnd="5dp"/>
-                    </TableRow>
+                    <TextView
+                        android:id="@+id/viewTv"
+                        android:layout_weight="1"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="5dp"/>
+                </TableRow>
 
-                    <!--Downloads Count Row-->
-                    <TableRow android:layout_marginTop="5dp">
-                        <TextView
-                            android:id="@+id/downloadsLabelTv"
-                            style="@style/TextAppearance.MaterialComponents.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Downloads:"
-                            android:textSize="20dp"
-                            android:textColor="@color/white"
-                            android:layout_marginEnd="5dp"/>
+                <!--Downloads Count Row-->
+                <TableRow android:layout_marginTop="5dp">
+                    <TextView
+                        android:id="@+id/downloadsLabelTv"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Downloads:"
+                        android:textSize="20dp"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="5dp"/>
 
-                        <TextView
-                            android:id="@+id/downloadsTv"
-                            android:layout_weight="1"
-                            style="@style/TextAppearance.MaterialComponents.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="N/A"
-                            android:textSize="15dp"
-                            android:textColor="@color/white"
-                            android:layout_marginEnd="5dp"/>
-                    </TableRow>
+                    <TextView
+                        android:id="@+id/downloadsTv"
+                        android:layout_weight="1"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="5dp"/>
+                </TableRow>
 
-                    <!--Downloads Count Row-->
-                    <TableRow android:layout_marginTop="5dp">
-                        <TextView
-                            android:id="@+id/pagesLabelTv"
-                            style="@style/TextAppearance.MaterialComponents.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Pages:"
-                            android:textSize="20dp"
-                            android:textColor="@color/white"
-                            android:layout_marginEnd="5dp"/>
+                <!--Downloads Count Row-->
+                <TableRow android:layout_marginTop="5dp">
+                    <TextView
+                        android:id="@+id/pagesLabelTv"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pages:"
+                        android:textSize="20dp"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="5dp"/>
 
-                        <TextView
-                            android:id="@+id/pagesTv"
-                            android:layout_weight="1"
-                            style="@style/TextAppearance.MaterialComponents.Caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="N/A"
-                            android:textSize="15dp"
-                            android:textColor="@color/white"
-                            android:layout_marginEnd="5dp"/>
-                    </TableRow>
+                    <TextView
+                        android:id="@+id/pagesTv"
+                        android:layout_weight="1"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="N/A"
+                        android:textSize="15dp"
+                        android:textColor="@color/white"
+                        android:layout_marginEnd="5dp"/>
+                </TableRow>
 
-                </TableLayout>
+            </TableLayout>
 
             <!-- Book description-->
             <TextView
@@ -269,22 +269,32 @@
         <!--Button: read book-->
         <Button
             android:id="@+id/readBookBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Read"
-            android:drawableTop="@drawable/ic_book_white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@color/purple_1000"/>
+            android:backgroundTint="@color/purple_1000"
+            android:drawableTop="@drawable/ic_book_white"
+            android:text="Read" />
 
         <!--Button: download book-->
         <Button
             android:id="@+id/downloadBookBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Download"
-            android:drawableTop="@drawable/ic_download_white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:backgroundTint="@color/purple_1000"/>
+            android:backgroundTint="@color/purple_1000"
+            android:drawableTop="@drawable/ic_download_white"
+            android:text="Download" />
+
+        <!--Button: add/remove favorite-->
+        <Button
+            android:id="@+id/favoriteBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_favorite_white"
+            android:backgroundTint="@color/purple_1000"
+            android:text="Add Favorite"/>
 
     </LinearLayout>
 </RelativeLayout>
