@@ -3,6 +3,7 @@ package com.example.bookappyt
 import android.app.Application
 import android.app.ProgressDialog
 import android.content.Context
+import android.os.Environment
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
@@ -10,11 +11,13 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import com.github.barteksc.pdfviewer.PDFView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
+import java.io.FileOutputStream
 
 import java.util.*
 import kotlin.collections.HashMap
@@ -26,6 +29,7 @@ class MyApplication : Application() {
 
     companion object {
         // tao 1 phuong thuc convert Time cho luon ca project
+        const val TAG_DOWNLOAD = "DOWNLOAD_TAG"
         fun formatTimeStamp(timestamp: Long): String {
             val cal = Calendar.getInstance(Locale.ENGLISH)
             cal.timeInMillis = timestamp
@@ -131,6 +135,7 @@ class MyApplication : Application() {
 
         }
 
+
         fun incrementBookViewCount(bookId: String) {
             //1) hien thi so luot doc cua cuon sach do
             val ref = FirebaseDatabase.getInstance().getReference("Books") // vao thuoc tinh Books
@@ -161,6 +166,7 @@ class MyApplication : Application() {
                     }
                 })
         }
+
 
         fun loadPdfFromUrlSinglePage(
             pdfUrl: String,
@@ -205,7 +211,118 @@ class MyApplication : Application() {
                 Log.d(TAG, "loadPdfSize: Failed to get metadata due to ${e.message}")
             }
         }
+        private fun saveDownloadedBook(context: Context, progressDialog: ProgressDialog, bytes: ByteArray, nameWithExtension: String, bookId: String) {
+            Log.d(TAG_DOWNLOAD, "saveDownloadedBook: Saving downloaded book")
+            try {
+                val downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                downloadsFolder.mkdirs()
+
+                val filePath = "${downloadsFolder.path}/$nameWithExtension"
+
+                val out = FileOutputStream(filePath)
+                out.write(bytes)
+                out.close()
+
+                Toast.makeText(context, "Saved to Download Folder", Toast.LENGTH_SHORT).show()
+                Log.d(TAG_DOWNLOAD, "saveDownloadedBook: Saved to Download Folder")
+                progressDialog.dismiss()
+
+                incrementBookDownloadCount(bookId)
+            } catch (e: Exception) {
+                Log.d(TAG_DOWNLOAD, "saveDownloadedBook: Failed saving to Download Folder due to ${e.message}")
+                Toast.makeText(context, "Failed saving to Download Folder due to ${e.message}", Toast.LENGTH_SHORT).show()
+                progressDialog.dismiss()
+            }
+        }
+
+        private fun incrementBookDownloadCount(bookId: String) {
+            Log.d(TAG_DOWNLOAD, "incrementBookDownloadCount: Incrementing Book Download count")
+
+            // Bước 1: Lấy số lần tải trước đó
+            val ref = FirebaseDatabase.getInstance().getReference("Books")
+            ref.child(bookId)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        var downloadsCount = snapshot.child("downloadsCount").value.toString()
+                        Log.d(TAG_DOWNLOAD, "onDataChange: Downloads Count: $downloadsCount")
+
+                        if (downloadsCount == "" || downloadsCount == "null") {
+                            downloadsCount = "0"
+                        }
+
+                        // Chuyển đổi sang kiểu long
+                        val newDownloadsCount = downloadsCount.toLong() + 1
+                        Log.d(TAG_DOWNLOAD, "onDataChange: New Download Count: $newDownloadsCount")
+
+                        // Thiết lập dữ liệu để cập nhật
+                        val hashMap = HashMap<String, Any>()
+                        hashMap["downloadsCount"] = newDownloadsCount
+
+                        // Bước 2: Cập nhật số lượt tải mới tăng lên vào cơ sở dữ liệu
+                        val reference = FirebaseDatabase.getInstance().getReference("Books")
+                        reference.child(bookId).updateChildren(hashMap)
+                            .addOnSuccessListener {
+                                Log.d(TAG_DOWNLOAD, "onSuccess: Downloads Count updated")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.d(TAG_DOWNLOAD, "onFailure: Failed to update Downloads Count due to ${e.message}")
+                            }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {}
+                })
+        }
+
+        fun addToFavorite(context: Context, bookId: String) {
+            // Chỉ có thể thêm vào danh sách yêu thích nếu người dùng đã đăng nhập
+            // 1) Kiểm tra xem người dùng đã đăng nhập chưa
+            val firebaseAuth = FirebaseAuth.getInstance()
+            if (firebaseAuth.currentUser == null) {
+                // Chưa đăng nhập, không thể thêm vào danh sách yêu thích
+                Toast.makeText(context, "You're not logged in", Toast.LENGTH_SHORT).show()
+            } else {
+                val timestamp = System.currentTimeMillis()
+
+                // Thiết lập dữ liệu để thêm vào cơ sở dữ liệu Firebase của người dùng hiện tại cho cuốn sách yêu thích
+                val hashMap = HashMap<String, Any>()
+                hashMap["bookId"] = bookId
+                hashMap["timestamp"] = timestamp
+
+                // Lưu vào cơ sở dữ liệu
+                val ref = FirebaseDatabase.getInstance().getReference("Users")
+                ref.child(firebaseAuth.uid!!).child("Favorites").child(bookId)
+                    .setValue(hashMap)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Added to your favorites list", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(context, "Failed to add to favorite due to ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
+        }
+        fun removeFromFavorite(context: Context, bookId: String) {
+            // Chỉ có thể xóa khỏi danh sách yêu thích nếu người dùng đã đăng nhập
+            // 1) Kiểm tra xem người dùng đã đăng nhập chưa
+            val firebaseAuth = FirebaseAuth.getInstance()
+            if (firebaseAuth.currentUser == null) {
+                // Chưa đăng nhập, không thể xóa khỏi danh sách yêu thích
+                Toast.makeText(context, "You're not logged in", Toast.LENGTH_SHORT).show()
+            } else {
+                // Xóa khỏi cơ sở dữ liệu
+                val ref = FirebaseDatabase.getInstance().getReference("Users")
+                ref.child(firebaseAuth.uid!!).child("Favorites").child(bookId)
+                    .removeValue()
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Removed from your favorites list", Toast.LENGTH_SHORT).show()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(context, "Failed to remove from favorite due to ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+            }
+        }
+
     }
+
 
 
 }
