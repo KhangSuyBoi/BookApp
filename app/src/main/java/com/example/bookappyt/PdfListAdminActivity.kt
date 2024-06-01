@@ -78,20 +78,20 @@ class PdfListAdminActivity : AppCompatActivity() {
         }
 
                 private fun loadPdfList() {
-            // init arraylist
+            // khoi tao arraylist
             pdfArrayList = ArrayList()
 
             val ref = FirebaseDatabase.getInstance().getReference("Books")
             ref.orderByChild("categoryId").equalTo(categoryId)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        // clear list before start adding data into it
+                        // clear mang truoc khi add vao
                         pdfArrayList.clear()
                         for (ds in snapshot.children) {
-                            // get data
+                            // lay data
                             val model = ds.getValue(ModelPdf::class.java)
 
-                            // add to list
+                            // them
                             if (model != null) {
                                 pdfArrayList.add(model)
                                 Log.d(TAG, "onDataChange: ${model.title} ${model.categoryId}")

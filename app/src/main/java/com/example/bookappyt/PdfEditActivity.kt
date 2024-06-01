@@ -21,13 +21,9 @@ class PdfEditActivity : AppCompatActivity() {
 
     // view binding
     private lateinit var binding: ActivityPdfEditBinding
-    // book id get from intent started from AdapterPdfAdmin
-    private var bookId = ""
-    //progress dialog
+    private var bookId = "" // lay tu intent AdapterPdfAdmin
     private lateinit var progressDialog: ProgressDialog
-    // arraylist to hold category titles
     private lateinit var categoryTitleArrayList:ArrayList<String>
-    // arraylist to hold category ids
     private lateinit var categoryIdArrayList: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,28 +32,28 @@ class PdfEditActivity : AppCompatActivity() {
         binding = ActivityPdfEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // get book id to edit the book
+        // lay idBook
         bookId = intent.getStringExtra("bookId")!!
 
-        // setup progress dialog
+
         progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please Wait")
         progressDialog.setCanceledOnTouchOutside(false)
 
-        loadCategories()
+        loadCategories() // hien thi list Category
         loadBookInfo()
 
-        // handle click, goback
+
         binding.backBtn.setOnClickListener {
             onBackPressed()
         }
 
-        // handle click, pick category
+
         binding.categoryTv.setOnClickListener {
-            categoryDialog()
+            categoryDialog() // hien thi ra hop thoai category de chon category cua book do
         }
 
-        // handle click, begin update
+        // click submit
         binding.submitBtn.setOnClickListener {
             validateData()
         }
@@ -65,26 +61,27 @@ class PdfEditActivity : AppCompatActivity() {
 
     private fun loadBookInfo() {
         Log.d(TAG, "lookBookInfo: Loading book info")
-        val ref = FirebaseDatabase.getInstance().getReference("Books")
+        val ref = FirebaseDatabase.getInstance().getReference("Books") // tham chieu den books
         ref.child(bookId)
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    selectedCategoryId = snapshot.child("categoryId").value.toString()
+                    selectedCategoryId = snapshot.child("categoryId").value.toString() // khi duoc click thi tham chieu den id cua category duoc chon
                     val description = snapshot.child("description").value.toString()
                     val title = snapshot.child("title").value.toString()
 
                     binding.titleEt.setText(title)
                     binding.descriptionEt.setText(description)
 
-                    // load book category info using categoryId
+                    // lay ten the loai cua sach do tu id category
+                    //de hien thi ten category thong qua id category
                     Log.d(TAG, "onDataChange: Loading book category info")
-                    val refBookCategory = FirebaseDatabase.getInstance().getReference("Categories")
-                    refBookCategory.child(selectedCategoryId)
+                    val refBookCategory = FirebaseDatabase.getInstance().getReference("Categories") // tham chieu den categories
+                    refBookCategory.child(selectedCategoryId) // tham chieu toi category id
                         .addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
-                                // get category
+                                // lay gia tri category
                                 val category = snapshot.child("category").value
-                                // set to textView
+                                // hien thi category
                                 binding.categoryTv.text = category.toString()
                             }
 
@@ -103,12 +100,9 @@ class PdfEditActivity : AppCompatActivity() {
 
     private var title = ""
     private var description = ""
-    private fun validateData() {
-        // get data
+    private fun validateData() { // xac thuc du lieu
         title = binding.titleEt.text.toString().trim()
         description = binding.descriptionEt.text.toString().trim()
-
-        // validate data
         if (title.isEmpty()) {
             Toast.makeText(this, "Enter title", Toast.LENGTH_SHORT).show()
         } else if (description.isEmpty()) {
@@ -126,16 +120,16 @@ class PdfEditActivity : AppCompatActivity() {
         progressDialog.setMessage("Updating book info")
         progressDialog.show()
 
-        // setup data to update to db, spelling of keys must be same as in firebase
+        // thiet lap data trong db
         val hashMap = HashMap<String, Any>()
         hashMap["title"] = "$title"
         hashMap["description"] = "$description"
         hashMap["categoryId"] = "$selectedCategoryId"
 
-        // start updating
+        // update
         val ref = FirebaseDatabase.getInstance().getReference("Books")
         ref.child(bookId)
-            .updateChildren(hashMap)
+            .updateChildren(hashMap) // update lai hashMap
             .addOnSuccessListener {
                 progressDialog.dismiss()
                 Log.d(TAG, "updatePdf: Updated successfully...")
@@ -152,23 +146,22 @@ class PdfEditActivity : AppCompatActivity() {
     private var selectedCategoryTitle = ""
 
     private fun categoryDialog() {
-        /*show dialog to pic the category of pdf/book. we already got the categories*/
 
-        // make string array from arrayList of string
+        // Khoi tao List category
         val categoriesArray = arrayOfNulls<String>(categoryTitleArrayList.size)
-        for (i in categoryTitleArrayList.indices) {
-            categoriesArray[i] = categoryTitleArrayList[i]
+        for (i in categoryTitleArrayList.indices) { // duyet qua tung phan tu trong mang
+            categoriesArray[i] = categoryTitleArrayList[i] // gan gia tri
         }
 
         // alert dialog
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Choose Category")
             .setItems(categoriesArray) {dialog, position ->
-                // handle click, save clicked category id and title
+                // click vao category -> save lai ten va id cua category do
                 selectedCategoryId = categoryIdArrayList[position]
                 selectedCategoryTitle = categoryTitleArrayList[position]
 
-                // set to textView
+                // thiet lap textView
                 binding.categoryTv.text = selectedCategoryTitle
             }
             .show()
@@ -182,7 +175,7 @@ class PdfEditActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("Categories")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // clear list before starting adding data into them
+                // clear list truoc khi add
                 categoryIdArrayList.clear()
                 categoryTitleArrayList.clear()
 

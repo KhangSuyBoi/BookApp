@@ -21,11 +21,11 @@ class PdfViewActivity : AppCompatActivity() {
     // View binding
     private lateinit var binding: ActivityPdfViewBinding
 
-    // book id
+    // book id tu intent
     private var bookId = ""
 
     //TAG
-    private companion object{
+    private companion object{ // xac dinh ngu canh
         const val TAG = "PDF_VIEW_TAG"
     }
 
@@ -34,11 +34,9 @@ class PdfViewActivity : AppCompatActivity() {
         binding = ActivityPdfViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // get book id back
         bookId = intent.getStringExtra("bookId")!!
-        loadBookDetails(this)
+        loadBookDetails(this) // lay id book cua intent va load id book tuong ung
 
-        // handle click, goback
         binding.backBtn.setOnClickListener {
             onBackPressed()
         }
@@ -46,23 +44,16 @@ class PdfViewActivity : AppCompatActivity() {
 
     private fun loadBookDetails(context: Context) {
         Log.d(TAG, "loadBookDetails: Get Pdf URL from db")
-        // Database reference to get book details e.g. get book url using book id
-        // Step (1) Get Book Url using Book Id
+        // B1: lay url theo id book
         val ref = FirebaseDatabase.getInstance().getReference("Books")
-        ref.child(bookId)
+        ref.child(bookId) // tham chieu den nut con Book id
             .addListenerForSingleValueEvent(object : ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val pdfUrl = snapshot.child("url").value
+                    val pdfUrl = snapshot.child("url").value // lay url tuong ung id book
                     Log.d(TAG, "onDataChange: PDF_URL: $pdfUrl")
 
-                    // Step (2) load pdf using url from firebase storage
-                    //loadBookFromUrl("$pdfUrl")
-                    //val pdfUrl2 = "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf"
+                    // B2: load url cua pdf trong db
                     openHttpDocument(context, "$pdfUrl")
-
-                    // Open our sample document in the 'res/raw' resource folder
-                    //openRawResourceDocument(context, R.raw.sample)
-                    //finish()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -80,9 +71,9 @@ class PdfViewActivity : AppCompatActivity() {
 
                 // load pdf
                 binding.pdfView.fromBytes(bytes)
-                    .swipeHorizontal(false)
-                    .onPageChange{page, pageCount ->
-                        // set current and total pages in toolbar subtitle
+                    .swipeHorizontal(false) // tat tinh nang luot ngang
+                    .onPageChange{page, pageCount -> // khi trang thay doi
+                        //  thay doi so trang hien tai
                         val currentPage = page + 1
                         binding.toolbarSubtitleTv.text = "$currentPage/$pageCount"
                         Log.d(TAG, "loadBookFromUrl: $currentPage/$pageCount")
@@ -130,10 +121,17 @@ class PdfViewActivity : AppCompatActivity() {
      * @param url an HTTP/HTTPS url to a document
      */
     private fun openHttpDocument(context: Context, url: String) {
-        val config = ViewerConfig.Builder().openUrlCachePath(this.getCacheDir().getAbsolutePath()).build()
+        // Tạo một cấu hình cho việc xem tài liệu
+        val config = ViewerConfig.Builder()
+            .openUrlCachePath(this.getCacheDir().absolutePath) // Đặt đường dẫn thư mục để lưu tài liệu tạm thời
+            .build()
+
         val fileLink = Uri.parse(url)
+
+        // Mở tài liệu từ URL sử dụng cấu hình đã tạo
         presentDocument(fileLink, config)
     }
+
 
     /**
      *
@@ -155,10 +153,10 @@ class PdfViewActivity : AppCompatActivity() {
 
     private fun presentDocument(uri: Uri, config: ViewerConfig?) {
         var config = config
-        if (config == null) {
+        if (config == null) { // neu config null se khoi tao 1 config moi
             config = ViewerConfig.Builder().saveCopyExportPath(this.cacheDir.absolutePath).build()
         }
-        val intent =
+        val intent = // tao 1 Intent de mo tai lieu
             DocumentActivity.IntentBuilder.fromActivityClass(this, DocumentActivity::class.java)
                 .withUri(uri)
                 .usingConfig(config)

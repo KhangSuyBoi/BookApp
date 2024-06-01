@@ -27,9 +27,9 @@ class PdfDetailActivity : AppCompatActivity() {
         const val TAG = "BOOK_DETAILS_TAG"
     }
 
-    // book id, get from intent
+    // lay id book tu intent
     private var bookId= ""
-    // get from firebase
+    // lay tu db
     private var bookTitle = ""
     private var bookUrl = ""
 
@@ -40,48 +40,45 @@ class PdfDetailActivity : AppCompatActivity() {
         binding = ActivityPdfDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // get book id from intent
+        // lay id book tu intent
         bookId = intent.getStringExtra("bookId")!!
 
-        // initialize progress bar
+
         progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please wait")
         progressDialog.setCanceledOnTouchOutside(false)
 
-        // increment book view count, whenever this page starts
+        // hien thi luot doc cua book do
         MyApplication.incrementBookViewCount(bookId)
 
         loadBookDetails()
 
-        // handle backbutton click, goback
         binding.backBtn.setOnClickListener {
             onBackPressed()
         }
 
-        // handle click, open pdf view activity
         binding.readBookBtn.setOnClickListener {
-            val intent = Intent(this, PdfViewActivity::class.java)
+            val intent = Intent(this, PdfViewActivity::class.java) // khoi tao intent de giao tiep
             intent.putExtra("bookId", bookId)
             startActivity(intent)
         }
 
-        // handle click, download book/pdf
+
         binding.downloadBookBtn.setOnClickListener {
-            // check WRITE_EXTERNAL_STORAGE permission, if granted download book and else request permission
+            // kiem tra quyen WES duoc cap hay chua
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Log.d(TAG, "onCreate: STORAGE PERMISSION is already granted")
-                downloadBook()
+                downloadBook() // neu cap quyen thi tai xuong
             }
             else {
                 Log.d(TAG, "onCreate: STORAGE PERMISSION was not granted, request it")
-                requestStoragePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                requestStoragePermissionLauncher.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE) // neu chua thi phai yeu cau cap quyen tu nguoi dung
             }
         }
     }
 
     private val requestStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-        // check if granted or not
-        if (isGranted) {
+        if (isGranted) { // kiem tra quyen duoc cap hay chua
             Log.d(TAG, "onCreate: STORAGE PERMISSION is granted")
             downloadBook()
         }
@@ -96,9 +93,9 @@ class PdfDetailActivity : AppCompatActivity() {
         progressDialog.setMessage("Downloading Book")
         progressDialog.show()
 
-        // download book from firebase storage using url
+        // download book tu url trong db
         val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(bookUrl)
-        storageReference.getBytes(Constants.MAX_BYTES_PDF)
+        storageReference.getBytes(Constants.MAX_BYTES_PDF) // tai max byte cua book
             .addOnSuccessListener { bytes ->
                 Log.d(TAG, "downloadBook: Book Downloaded")
                 saveToDownloadsFolder(bytes)
@@ -113,10 +110,10 @@ class PdfDetailActivity : AppCompatActivity() {
     private fun saveToDownloadsFolder(bytes: ByteArray?) {
         Log.d(TAG, "saveToDownloadsFolder: Saving Downloaded Book")
 
-        val namWithExtention = "${System.currentTimeMillis()}-$bookTitle.pdf"
+        val namWithExtention = "${System.currentTimeMillis()}-$bookTitle.pdf" // su dung thoi gian hien tai + ten sach
 
         try {
-            val downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) // lay thu muc de tai sach ve - neu chua co se khoi tao
             downloadsFolder.mkdirs()
 
             val filePath = downloadsFolder.path + "/" + namWithExtention
@@ -128,7 +125,7 @@ class PdfDetailActivity : AppCompatActivity() {
             Toast.makeText(this, "Saved to Downloads Folder", Toast.LENGTH_SHORT).show()
             Log.d(TAG, "saveToDownloadsFolder: Saved to Downloads Folder")
             progressDialog.dismiss()
-            incrementDownloadCount()
+            incrementDownloadCount() // so luot tai ve cua sach do
         }
         catch(e: Exception) {
             progressDialog.dismiss()
@@ -140,12 +137,12 @@ class PdfDetailActivity : AppCompatActivity() {
     private fun incrementDownloadCount() {
         Log.d(TAG, "incrementDownloadCount: ")
 
-        val ref = FirebaseDatabase.getInstance().getReference("Books")
-        ref.child(bookId)
+        val ref = FirebaseDatabase.getInstance().getReference("Books") // tham chieu den Books trong DB
+        ref.child(bookId) // chuyen den nut con BookId
             .addListenerForSingleValueEvent(object: ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    var downloadsCount = "${snapshot.child("downloadsCount").value}"
-                    Log.d(TAG, "onDataChange: Current Downloads Count: $downloadsCount")
+                    var downloadsCount = "${snapshot.child("downloadsCount").value}" // lay so luot tai ve cua sach do
+                    Log.d(TAG, "onDataChange: Current Downloads Count: $downloadsCount") // thay doi so luot tai ve
 
                     if (downloadsCount == "" || downloadsCount == "null") {
                         downloadsCount = "0"
@@ -159,7 +156,7 @@ class PdfDetailActivity : AppCompatActivity() {
 
                     val dbRef = FirebaseDatabase.getInstance().getReference("Books")
                     dbRef.child(bookId)
-                        .updateChildren(hashMap)
+                        .updateChildren(hashMap) // update them so luot downloads cua Book
                         .addOnSuccessListener {
                             Log.d(TAG, "onDataChange: Downloads Count Incremented")
                         }
@@ -175,11 +172,11 @@ class PdfDetailActivity : AppCompatActivity() {
     }
 
     private fun loadBookDetails() {
-        val ref = FirebaseDatabase.getInstance().getReference("Books")
+        val ref = FirebaseDatabase.getInstance().getReference("Books") // tham chieu den Book
         ref.child(bookId)
             .addListenerForSingleValueEvent(object: ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    // get data
+                    // lay du lieu cua Book
                     val categoryId = "" + snapshot.child("categoryId").value
                     val description = "" + snapshot.child("description").value
                     val downloadsCount = "" + snapshot.child("downloadsCount").value
@@ -189,16 +186,15 @@ class PdfDetailActivity : AppCompatActivity() {
                     bookUrl = "" + snapshot.child("url").value
                     val viewsCount = "" + snapshot.child("viewsCount").value
 
-                    // format date
+                    // format lai ngay thang
                     val date = MyApplication.formatTimeStamp(timestamp.toLong())
 
-                    // load pdf category
+                    // lay du lieu de hien thi Category
                     MyApplication.loadCategory(categoryId, binding.categoryTv)
-                    // load pdf thumbnail, pages count
+                    // lay du lieu de hien thi pdf thumbnail, so trang
                     MyApplication.loadPdfFromUrlSinglePage("$bookUrl", "$bookTitle", binding.pdfView, binding.progressBar, binding.pagesTv)
-                    // load pdf size
+                    // lay du lieu de hien thi pdf size
                     MyApplication.loadPdfSize("$bookUrl", "$bookTitle", binding.sizeTv)
-                    // set data
                     binding.titleTv.text = bookTitle
                     binding.descriptionTv.text = description
                     binding.viewTv.text = viewsCount

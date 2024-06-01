@@ -120,6 +120,7 @@ class AdapterPdfAdmin : RecyclerView.Adapter<AdapterPdfAdmin.HolderPdfAdmin>, Fi
             .show()
     }
 
+
     override fun getItemCount(): Int {
         return pdfArrayList.size
     }

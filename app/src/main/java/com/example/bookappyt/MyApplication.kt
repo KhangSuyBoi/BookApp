@@ -25,7 +25,7 @@ class MyApplication : Application() {
     }
 
     companion object {
-        // created a static method to convert timestamp to proper date format, so we can use it everywhere in project, no need to rewrite again
+        // tao 1 phuong thuc convert Time cho luon ca project
         fun formatTimeStamp(timestamp: Long): String {
             val cal = Calendar.getInstance(Locale.ENGLISH)
             cal.timeInMillis = timestamp
@@ -34,24 +34,24 @@ class MyApplication : Application() {
             return DateFormat.format("dd/MM/yyyy", cal).toString()
         }
 
-        // function to get pdf size
+        // function de lay Pdf Size
         fun loadPdfSize(pdfUrl: String, pdfTitle: String, sizeTv: TextView) {
             val TAG = "PDF_SIZE_TAG"
 
-            // using url we can get file and its metadata from firebase storage
+            // su dung url tu db
             val ref = FirebaseStorage.getInstance().getReferenceFromUrl(pdfUrl)
             ref.metadata.addOnSuccessListener { storageMetaData ->
-                Log.d(TAG, "loadPdfSize: got metadata")
+                Log.d(TAG, "loadPdfSize: got metadata") // lay duoc thanh cong
                 val bytes = storageMetaData.sizeBytes.toDouble()
                 Log.d(TAG, "loadPdfSize: Size Bytes $bytes")
 
-                // convert bytes to KB/MB
+                // chuyen doi bytes to KB/MB
                 val kb = bytes / 1024
                 val mb = kb / 1024
-                if (mb >= 1) {
-                    sizeTv.text = "${String.format("%.2f", mb)} MB"
-                } else if (kb >= 1) {
-                    sizeTv.text = "${String.format("%.2f", kb)} KB"
+                if (mb >= 1) { // neu pdf co kich thuoc lon hon 1MB
+                    sizeTv.text = "${String.format("%.2f", mb)} MB" // hien thi voi kich thuoc MB
+                } else if (kb >= 1) { // 1MB > PDF size >= 1KB
+                    sizeTv.text = "${String.format("%.2f", kb)} KB" // hien thi voi kich thuoc KB
                 } else {
                     sizeTv.text = "${
                         String.format("%.2f", bytes)
@@ -67,14 +67,14 @@ class MyApplication : Application() {
         }
 
         fun loadCategory(categoryId: String, categoryTv: TextView) {
-            // load category using category id from firebase
+            // sử dụng mục category từ db
             val ref = FirebaseDatabase.getInstance().getReference("Categories")
             ref.child(categoryId).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    // get category
+                    // lấy giá trị tên danh mục category
                     val category = "${snapshot.child("category").value}"
 
-                    // set category
+                    // đặt tên danh mục vào textView
                     categoryTv.text = category
                 }
 
@@ -85,10 +85,10 @@ class MyApplication : Application() {
         }
 
         fun deleteBook(context: Context, bookId: String, bookUrl: String, bookTitle: String) {
-            // context, used when require e.g. for progress dialog, toast
-            // bookId, to delete book from db
-            // bookUrl, delete book from firebase
-            // bookTitle, show in dialog etc
+            // context : ngu canh - hien thi hop thoai thong bao
+            // bookId : id cua sach can xoa
+            // bookUrl : url cua sach can xoa
+            // bookTitle : ten cua sach can xoa
 
             val TAG = "DELETE_BOOK_TAG"
             Log.d(TAG, "deleteBook: deleting...")
@@ -100,14 +100,17 @@ class MyApplication : Application() {
             progressDialog.setCanceledOnTouchOutside(false)
             progressDialog.show()
             Log.d(TAG, "deleteBook: Deleting from storage...")
-            val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(bookUrl)
+
+            // xoa pdf tu db
+            val storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(bookUrl) // lay url cua pdf can xoa
             storageReference.delete()
                 .addOnSuccessListener {
                     Log.d(TAG, "deleteBook: Deleted from storage")
                     Log.d(TAG, "deleteBook: Deleting from db now")
-                    val ref = FirebaseDatabase.getInstance().getReference("Books")
-                    ref.child(bookId)
-                        .removeValue()
+
+                    val ref = FirebaseDatabase.getInstance().getReference("Books") // tham chieu den Book
+                    ref.child(bookId) // lay id Book can xoa
+                        .removeValue() // xoa
                         .addOnSuccessListener {
                             progressDialog.dismiss()
                             Toast.makeText(context, "Successfully deleted...", Toast.LENGTH_SHORT).show()
@@ -129,29 +132,29 @@ class MyApplication : Application() {
         }
 
         fun incrementBookViewCount(bookId: String) {
-            //1) Get current book views count
-            val ref = FirebaseDatabase.getInstance().getReference("Books")
+            //1) hien thi so luot doc cua cuon sach do
+            val ref = FirebaseDatabase.getInstance().getReference("Books") // vao thuoc tinh Books
             ref.child(bookId)
                 .addListenerForSingleValueEvent(object: ValueEventListener{
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        // get views count
+                        // tham chieu den nut viewCount
                         var viewsCount = "${snapshot.child("viewsCount").value}"
 
                         if (viewsCount == "" || viewsCount == "null") {
                             viewsCount = "0"
                         }
 
-                        // 2 Increment views count
+                        // 2. Tang so luot doc
                         val newViewsCount = viewsCount.toLong() + 1
 
-                        // setup data to update in db
+                        // thiet lap du lieu trong co so du lieu
                         val hashMap = HashMap<String, Any>()
                         hashMap["viewsCount"] = newViewsCount
 
                         // set to db
                         val dbRef = FirebaseDatabase.getInstance().getReference("Books")
                         dbRef.child(bookId)
-                            .updateChildren(hashMap)
+                            .updateChildren(hashMap) // cap nhat them vao db
                     }
                     override fun onCancelled(error: DatabaseError) {
                         TODO("Not yet implemented")
@@ -159,33 +162,26 @@ class MyApplication : Application() {
                 })
         }
 
-        /*instead of making new function loadPdfPageCount() to just load pages count it would be more good to use some existing function to do that
-        * i.e. loadPdfFromUrlSinglePage
-        * We will add another parameter of type TextView e.g. pageTv
-        * whenever we call that function
-        * 1) if we require page numbers we will pass pagesTv(TextView)
-        * 2)if we don't require page number we will pass null
-        * and in function if pagesTv(TextView parameter is not null we will set the page number count*/
         fun loadPdfFromUrlSinglePage(
             pdfUrl: String,
             pdfTitle: String,
             pdfView: PDFView,
             progressBar: ProgressBar,
-            pagesTv: TextView?
+            pagesTv: TextView? // hien thi so trang
         ) {
             val TAG = "PDF_THUMBNAIL_TAG"
 
-            // using url we can get file and its metadata from firebase storage
+            // su dung url va da tu db
             val ref = FirebaseStorage.getInstance().getReferenceFromUrl(pdfUrl)
             ref.getBytes(Constants.MAX_BYTES_PDF).addOnSuccessListener { bytes ->
 
                 Log.d(TAG, "loadPdfSize: Size Bytes $bytes")
 
-                // set to pdfview
+                // thiet lap du lieu PDF vao pdfView
                 pdfView.fromBytes(bytes)
-                    .pages(0) // show first page only
+                    .pages(0) // hien thi trang dau tien
                     .spacing(0)
-                    .swipeHorizontal(false)
+                    .swipeHorizontal(false) // tat tinh nang vuot ngang
                     .enableSwipe(false)
                     .onError { t ->
                         progressBar.visibility = View.INVISIBLE
@@ -199,14 +195,13 @@ class MyApplication : Application() {
                         // pdf loaded, we can set page count, pdf thumbnail
                         progressBar.visibility = View.INVISIBLE
 
-                        // if pagesTv param is not null then set page numbers
+                        // hien thi so trang
                         if (pagesTv != null) {
                             pagesTv.text = "$nbPages"
                         }
                     }
                     .load()
             }.addOnFailureListener { e ->
-                // failed to get metadata
                 Log.d(TAG, "loadPdfSize: Failed to get metadata due to ${e.message}")
             }
         }

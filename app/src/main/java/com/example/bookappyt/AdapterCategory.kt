@@ -37,7 +37,7 @@ class AdapterCategory : RecyclerView.Adapter<AdapterCategory.HolderCategory>, Fi
     }
 
     override fun onBindViewHolder(holder: HolderCategory, position: Int) {
-        //hàm này được gọi khi RecylcleView cần thiết lập dữ liệu và xử lý sự kiện cho 1 ViewHolder
+        //hàm này được gọi khi Recycle View cần thiết lập dữ liệu và xử lý sự kiện cho 1 ViewHolder
 
         // lấy dữ liệu
         var model = categoryArrayList[position]
@@ -64,7 +64,7 @@ class AdapterCategory : RecyclerView.Adapter<AdapterCategory.HolderCategory>, Fi
                 .show()
         }
 
-        // khi người dùng nhấn vào 1 mục trong các danh mục đó
+        // khi người dùng nhấn vào 1 mục trong các danh mục đó -> show PDF
         holder.itemView.setOnClickListener{
             val intent = Intent(context, PdfListAdminActivity::class.java)
             //2 thông tin được truyền vào là ID và tên của thể loại
