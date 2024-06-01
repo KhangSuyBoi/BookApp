@@ -13,7 +13,6 @@ import com.google.firebase.database.ValueEventListener
 
 class PdfListAdminActivity : AppCompatActivity() {
 
-    // view binding
     private lateinit var binding: ActivityPdfListAdminBinding
 
     private companion object {
@@ -24,7 +23,7 @@ class PdfListAdminActivity : AppCompatActivity() {
     private var categoryId = ""
     private var category = ""
 
-    //arraylist to hold books
+    //mang cua pdf
     private lateinit var pdfArrayList: ArrayList<ModelPdf>
 
     //adapter
@@ -36,26 +35,24 @@ class PdfListAdminActivity : AppCompatActivity() {
         binding = ActivityPdfListAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // get from intent, that we passed from adapter
+        // tao intent va lay du lieu tu category
         val intent = intent
         categoryId = intent.getStringExtra("categoryId")!!
         category = intent.getStringExtra("category")!!
 
-        // set pdf category
         binding.subtitleTv.text = category
 
-        // load pdf/books
+        // tai list cua pdf
         loadPdfList()
 
-        // handle click, goback
         binding.backBtn.setOnClickListener {
             onBackPressed()
         }
 
         // search
         binding.searchEt.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence?,
+            override fun beforeTextChanged( // truoc khi search
+                s: CharSequence?, //ten pdf can search
                 start: Int,
                 count: Int,
                 after: Int
@@ -66,8 +63,7 @@ class PdfListAdminActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // filter data
                 try {
-
-                    adapterPdfAdmin.filter!!.filter(s)
+                    adapterPdfAdmin.filter!!.filter(s) // su dung filter de loc theo tu khoa search
                 }
                 catch (e:Exception) {
                     Log.d(TAG, "onTextChanged: ${e.message}")

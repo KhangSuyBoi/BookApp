@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/back1"
+    android:backgroundTint="@color/black_translucent"
     tools:context=".BooksUserFragment">
 
     <EditText

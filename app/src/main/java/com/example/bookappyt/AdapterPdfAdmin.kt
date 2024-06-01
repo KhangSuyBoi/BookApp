@@ -15,20 +15,16 @@ import com.example.bookappyt.databinding.RowPdfAdminBinding
 
 class AdapterPdfAdmin : RecyclerView.Adapter<AdapterPdfAdmin.HolderPdfAdmin>, Filterable {
 
-    // view binding
+    // show PdfAdminActivity
     private lateinit var binding: RowPdfAdminBinding
 
+    private var context: Context //cung cấp quyền truy cập vào tài nguyên nào đó
 
-    //context
-    private var context: Context
-
-    //arraylist to hold pdfs
+    //Mảng Pdf để lưu trữ dữ liệu
     public var pdfArrayList: ArrayList<ModelPdf>
 
     private val filterList: ArrayList<ModelPdf>
 
-
-    // filter object
     var filter: FilterPdfAdmin? = null
 
     //constructor
@@ -40,15 +36,15 @@ class AdapterPdfAdmin : RecyclerView.Adapter<AdapterPdfAdmin.HolderPdfAdmin>, Fi
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HolderPdfAdmin {
-        // binding/inflate layout row_pdf_admin.xml
+        // tao 1 ViewHolder cua HolderPdfAdmin, = cach nap layout row_pda_admin.xml vao ViewHolder
         binding = RowPdfAdminBinding.inflate(LayoutInflater.from(context), parent, false)
         return HolderPdfAdmin(binding.root)
     }
 
     override fun onBindViewHolder(holder: HolderPdfAdmin, position: Int) {
-        /*-----Get data, Set data, Handle click etc----*/
+        /*----Lay data, click, cai dat data,...----*/
 
-        // get data
+        // lay data
         val model = pdfArrayList[position]
         val pdfId = model.id
         val categoryId = model.categoryId
@@ -56,69 +52,68 @@ class AdapterPdfAdmin : RecyclerView.Adapter<AdapterPdfAdmin.HolderPdfAdmin>, Fi
         val description = model.description
         val pdfUrl = model.url
         val timestamp = model.timestamp
-        // convert timestamp to dd/MM/yy format
+        // doi gio sang format dd/MM/yy
         val formattedDate = MyApplication.formatTimeStamp(timestamp)
 
-        // set data
+        // set up data
         holder.titleTv.text = title
         holder.descriptionTv.text = description
         holder.dateTv.text = formattedDate
 
-        // load further details like category, pdf from url, pdf size
+        // du lieu cua category
 
-        //category id
+        //load theo id cua category
         MyApplication.loadCategory(categoryId, holder.categoryTv)
 
-        // we don't need page number here, pas null for for page number || load pdf thumbnail
+        // load pdf tu url va dung 1 view de hien thi PDF
         MyApplication.loadPdfFromUrlSinglePage(
             pdfUrl,
             title,
             holder.pdfView,
-            holder.progressBar,
+            holder.progressBar, //hien thi trang thai add pdf
             null
         )
 
         // load pdf size
         MyApplication.loadPdfSize(pdfUrl, title, holder.sizeTv)
 
-        // handle click, show dialog with options 1) Edit Book, 2) Delete Book
+        // co 2 option de chon la Edit va Delete
         holder.moreBtn.setOnClickListener {
             moreOptionsDialog(model, holder)
         }
 
-        // handle item click, open PdfDetailActivity activity, lets create it first
-        holder.itemView.setOnClickListener{
-            // intent with book id
+        // neu ma cick vao 1 item trong list thi se hien thi chi tiet cua pdf
+        holder.itemView.setOnClickListener{ // khi nguoi dung click vao phan nao cua Holder
+            // tao intent voi book Id, khoi tai PdfDetailActivity
             val intent = Intent(context, PdfDetailActivity::class.java)
             intent.putExtra("bookId", pdfId)
-            context.startActivity(intent)
+            context.startActivity(intent) // chuyen sang PdfDetailActivity
         }
 
 
     }
 
     private fun moreOptionsDialog(model: ModelPdf, holder: HolderPdfAdmin) {
-        // get id,url,title of book
+        // glay 3 thong tin cua pdf
         val bookId= model.id
         val bookUrl= model.url
         val bookTitle= model.title
 
-        // options to show in dialog
+        // option de chon trong dialog
         val options = arrayOf("Edit", "Delete")
 
-        // alert Dialog
+        // alert Dialog : thong bao cho nguoi dung 1 hanh dong sap xay ra
         val builder = AlertDialog.Builder(context)
         builder.setTitle("Choose Option")
             .setItems(options){dialog, position ->
                 if (position == 0) {
-                    // Edit is Clicked
+                    // 0 -> button Edit
                     val intent = Intent(context, PdfEditActivity::class.java)
                     intent.putExtra("bookId", bookId)
                     context.startActivity(intent)
-
                 } else if (position == 1) {
-                    // Delete is clicked
-                    // show confirmation dialog first if you need...
+                    // 1 -> button Delete
+                    // Hien thi confirm...
                     MyApplication.deleteBook(context, bookId, bookUrl, bookTitle)
                 }
             }
@@ -130,16 +125,16 @@ class AdapterPdfAdmin : RecyclerView.Adapter<AdapterPdfAdmin.HolderPdfAdmin>, Fi
     }
 
     override fun getFilter(): Filter {
-        if (filter == null) {
+        if (filter == null) { // xem bien khoi tao hay chua
             filter = FilterPdfAdmin(filterList, this)
         }
         return filter as FilterPdfAdmin
     }
 
 
-    /*View holder class for row_pdf_admin.xml*/
+    /* tao instance cua HolderPdfAdmin va tra ve noi, hien thi UI row_pdf_admin.xml*/
     inner class HolderPdfAdmin(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // UI views of row_pdf_admin.xml
+        // UI hien thi cua row_pdf_admin.xml
         val pdfView = binding.pdfView
         val progressBar = binding.progressBar
         val titleTv = binding.titleTv

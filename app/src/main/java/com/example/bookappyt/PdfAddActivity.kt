@@ -24,13 +24,12 @@ import com.google.firebase.storage.FirebaseStorage
 
 class PdfAddActivity : AppCompatActivity() {
 
-    // setup view binding activity_pdf_add --> ActivityPdfAddBinding
     private lateinit var binding: ActivityPdfAddBinding
 
     // firebase auth
     private lateinit var firebaseAuth: FirebaseAuth
 
-    // progress dialog (show while uploading pdf)
+    // progress dialog hien thi khi dang tai pdf
     private lateinit var progressDialog: ProgressDialog
 
     // arraylist to hold pdf categories
@@ -47,41 +46,40 @@ class PdfAddActivity : AppCompatActivity() {
         binding = ActivityPdfAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // init firebase auth
+        // khoi tao fb
         firebaseAuth = FirebaseAuth.getInstance()
         loadPdfCategories()
 
-        // setup progress dialog
+
         progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please wait")
         progressDialog.setCanceledOnTouchOutside(false)
 
-        // handle click, go back
+
         binding.backBtn.setOnClickListener{
             onBackPressed()
         }
 
-        // handle click, show category pick dialog
+        //
         binding.categoryTv.setOnClickListener {
-            categoryPickDialog()
+            categoryPickDialog() // show pdf khi pick category
         }
 
-        // handle click, pick pdf intent
+        // link pdf
         binding.attachPdfBtn.setOnClickListener {
             pdfPickIntent()
         }
 
-        // handle click, go back
         binding.backBtn.setOnClickListener{
             onBackPressed()
         }
 
-        // handle click, start uploading pdf/book
+        // add pdf/book
         binding.submitBtn.setOnClickListener {
-            // ste1: validate data
-            // step2: upload pdf to firebase storage
-            // step2: get url of uploaded pdf
-            // step4 upload pdf info to firebase db
+            // ste1: xac thuc data
+            // step2: upload pdf vao firebase storage
+            // step3: lay url cua pdf
+            // step4: cap nhat pdf len fb
 
             validateData()
         }
@@ -91,16 +89,16 @@ class PdfAddActivity : AppCompatActivity() {
     private var description = ""
     private var category = ""
 
+    // xac thuc du lieu
     private fun validateData() {
-        // validate data
         Log.d(TAG, "validateData: validating data")
 
-        // get data
+        // lay du lieu
         title = binding.titleEt.text.toString().trim()
         description = binding.descriptionEt.text.toString().trim()
         category = binding.categoryTv.text.toString().trim()
 
-        // validate data
+        // dieu kien xac thuc du lieu
         if (title.isEmpty()) {
             Toast.makeText(this, "Enter Title...", Toast.LENGTH_SHORT).show()
         } else if (description.isEmpty()) {
@@ -110,16 +108,15 @@ class PdfAddActivity : AppCompatActivity() {
         } else if (pdfUri == null) {
             Toast.makeText(this, "Enter PDF...", Toast.LENGTH_SHORT).show()
 
-
         } else {
-            // data validated, begin upload
+            // upload pdf
             uploadPdfToStorage()
         }
 
     }
 
     private fun uploadPdfToStorage() {
-        // step2: upload data to firebase storage
+        // step2: upload data vao firebase storage
         Log.d(TAG, "uploadPdfToStorage: uploading to storage...")
 
         // show progress dialog
@@ -129,21 +126,23 @@ class PdfAddActivity : AppCompatActivity() {
         // timestamp
         val timestamp = System.currentTimeMillis()
 
-        // path of pdf ifn firebase storage
+        // bien nay luu tru duong dan vs ten cua PDF tren FB storage
         val filePathAndName = "Books/$timestamp"
 
-        // storage reference
+
         val storageReference = FirebaseStorage.getInstance().getReference(filePathAndName)
         storageReference.putFile(pdfUri!!).addOnSuccessListener { taskSnapshot ->
             Log.d(
                 TAG, "uploadPdfToStorage: PDF uploaded now getting url..."
             )
-            // step3: get url of uploaded pdf
+            // step3: lay url cua pdf
+            // khoi tao task de lay url cua pdf
+            // taskSnapshot la ket qua cua viec tai tep len
             val uriTask: Task<Uri> = taskSnapshot.storage.downloadUrl
-            while (!uriTask.isSuccessful);
-            val uploadedPdfUrl = "${uriTask.result}"
+            while (!uriTask.isSuccessful); //chay vong lap cho den khi task lay thanh cong
+            val uploadedPdfUrl = "${uriTask.result}" //co nghia task da thanh cong va duoc luu tru ket qua o day
 
-            uploadPdfInfoToDb(uploadedPdfUrl, timestamp)
+            uploadPdfInfoToDb(uploadedPdfUrl, timestamp) // thuc thi
 
         }.addOnFailureListener { e ->
             Log.d(TAG, "uploadPdfToStorage: failed to upload due to ${e.message}")
@@ -154,11 +153,11 @@ class PdfAddActivity : AppCompatActivity() {
     }
 
     private fun uploadPdfInfoToDb(uploadedPdfUrl: String, timestamp: Long) {
-        // step4: upload pdf info to firebase db
+        // step4: upload pdf vao to firebase db
         Log.d(TAG, "uploadPdfInfoToDb: uploading to db")
         progressDialog.setMessage("Uploading pdf info...")
 
-        // uid of current user
+        // lay uid cua nguoi dung hien tai
         val uid = firebaseAuth.uid
 
         // setup data to upload
@@ -168,14 +167,13 @@ class PdfAddActivity : AppCompatActivity() {
         hashMap["title"] = "$title"
         hashMap["description"] = "$description"
         hashMap["categoryId"] = "$selectedCategoryId"
-        hashMap["url"] = "$uploadedPdfUrl"
+        hashMap["url"] = "$uploadedPdfUrl" //lay url vua tai xuong
         hashMap["timestamp"] = timestamp
         hashMap["viewCount"] = 0
         hashMap["downloadsCount"] = 0
 
-        //
         val ref = FirebaseDatabase.getInstance().getReference("Books")
-        ref.child("$timestamp").setValue(hashMap)
+        ref.child("$timestamp").setValue(hashMap) //them du lieu vao db tham chieu den nut timestam cua Book
             .addOnSuccessListener {
 
                 Log.d(TAG, "uploadPdfInfoToDb: uploaded to db")
@@ -194,24 +192,23 @@ class PdfAddActivity : AppCompatActivity() {
 
     private fun loadPdfCategories() {
         Log.d(TAG, "loadPdfCategories: Loading pdf categories")
-        //init arraylist
+        //khoi tao mang
         categoryArrayList = ArrayList()
-        // db reference to load categories DF > Categories
+        // tham chieu den Categories trong DB
         val ref = FirebaseDatabase.getInstance().getReference("Categories")
         ref.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                // clear list before adding data
+                // clear truoc khi add lai category
                 categoryArrayList.clear()
                 for (ds in snapshot.children) {
-                    // get data
+                    // lay data
                     val model = ds.getValue(ModelCategory::class.java)
 
-                    // add to arraylist
+                    // them vao mang
                     categoryArrayList.add(model!!)
                     Log.d(TAG, "onDataChange: ${model.category}")
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
@@ -222,25 +219,24 @@ class PdfAddActivity : AppCompatActivity() {
     private var selectedCategoryId = ""
     private var selectedCategoryTitle = ""
 
+    // show pdf khi pick category
     private fun categoryPickDialog() {
         Log.d(TAG, "categoryPickDialog: Showing pdf category pick dialog")
 
-        // get string array of categories from arraylsit
-        val categoriesArray = arrayOfNulls<String>(categoryArrayList.size)
-        for (i in categoryArrayList.indices) {
-            categoriesArray[i] = categoryArrayList[i].category
+        //lay mang cua category
+        val categoriesArray = arrayOfNulls<String>(categoryArrayList.size) // lay kich thuoc mang cua categories
+        for (i in categoryArrayList.indices) { // duyet qua tat ca cac phan tu trong mang
+            categoriesArray[i] = categoryArrayList[i].category // gan gia tri category - mang nay la chuoi chua cac category
         }
 
         // alert dialog
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Pick Category")
             .setItems(categoriesArray) { dialog, which ->
-                // handle item click
-                // get clicked item
+                // khi click -> gan
                 selectedCategoryTitle = categoryArrayList[which].category
                 selectedCategoryId = categoryArrayList[which].id
 
-                // set category to textview
                 binding.categoryTv.text = selectedCategoryTitle
 
                 Log.d(TAG, "categoryPickDialog: Selected Category ID: $selectedCategoryId")
@@ -250,23 +246,23 @@ class PdfAddActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun pdfPickIntent() {
+    private fun pdfPickIntent() { // khoi tao intent
         Log.d(TAG, "pdfPickIntent: starting pdf pick intent")
 
         val intent = Intent()
         intent.type = "application/pdf"
         intent.action = Intent.ACTION_GET_CONTENT
-        pdfActivityResultLauncher.launch(intent)
+        pdfActivityResultLauncher.launch(intent) // lay du lieu cua tai nguyen da duoc chon
     }
 
     val pdfActivityResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult(),
-        ActivityResultCallback<ActivityResult> { result ->
-            if (result.resultCode == RESULT_OK) {
+        ActivityResultCallback<ActivityResult> { result -> // xu ly ket qua tra ve tu Intent
+            if (result.resultCode == RESULT_OK) { // URL cua pdf duoc chon se duoc lay va gan cho Uri
                 Log.d(TAG, "PDF Picked")
                 pdfUri = result.data!!.data
             } else {
-                Log.d(TAG, "PDF Pick cancelled")
+                Log.d(TAG, "PDF Pick cancelled")  // url cua PDF do da bi huy
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
 
             }
