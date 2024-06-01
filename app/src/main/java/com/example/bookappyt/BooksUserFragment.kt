@@ -24,12 +24,14 @@ class BooksUserFragment: Fragment {
 
         public fun newInstance(categoryId: String, category: String, uid: String): BooksUserFragment {
             val fragment = BooksUserFragment()
+            // tạo một đối tượng "Bundle" để lưu trữ các tham số
             val args = Bundle()
+            // lưu các tham số vào đối tượng "Bundle"
             args.putString("categoryId", categoryId)
             args.putString("category", category)
             args.putString("uid", uid)
-            fragment.arguments = args
-            return fragment
+            fragment.arguments = args   // gán đối tượng "Bundle" vào thuộc tính "arguments" của đối tượng "fragment"
+            return fragment // trả về đối tượng "fragment"
         }
     }
 
@@ -45,18 +47,23 @@ class BooksUserFragment: Fragment {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val args = arguments
+        // kiểm tra xem "args" có null hay không
         if (args != null) {
+            // gán giá trị của các tham số từ đối tượng "args" vào các biến tương ứng
             categoryId = args.getString("categoryId")!!
             category = args.getString("category")!!
             uid = args.getString("uid")!!
+
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentBooksUserBinding.inflate(LayoutInflater.from(context), container, false)
 
+        // in ra một thông báo debug với thẻ "BOOKS_USER_TAG" và giá trị của biến "category"
         Log.d(TAG, "onCreateView: Category: $category")
 
+        /// kiểm tra giá trị của biến "category" và gọi các hàm tương ứng để tải dữ liệu sách
         if (category == "All") {
             loadAllBooks()
         }
@@ -70,6 +77,7 @@ class BooksUserFragment: Fragment {
             loadCategorizedBooks()
         }
 
+        // thêm một TextWatcher vào view "searchEt" của "binding" để lọc dữ liệu khi người dùng nhập từ khóa tìm kiếm
         binding.searchEt.addTextChangedListener { object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -92,14 +100,17 @@ class BooksUserFragment: Fragment {
 
     private fun loadAllBooks() {
         pdfArrayList = ArrayList()
+        // lấy một tham chiếu đến nút "Books" trong cơ sở dữ liệu Firebase
         val ref = FirebaseDatabase.getInstance().getReference("Books")
         ref.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                pdfArrayList.clear()
+                pdfArrayList.clear()    // xóa dữ liệu trong "pdfArrayList"
                 for (ds in snapshot.children) {
+                    // lặp qua các nút con của "Books" và thêm các đối tượng "ModelPdf" vào "pdfArrayList"
                     val model = ds.getValue(ModelPdf::class.java)
                     pdfArrayList.add(model!!)
                 }
+                // tạo một "AdapterPdfUser" mới và gán nó vào adapter của "booksRv" trong "binding"
                 adapterPdfUser=AdapterPdfUser(context!!, pdfArrayList)
                 binding.booksRv.adapter = adapterPdfUser
             }

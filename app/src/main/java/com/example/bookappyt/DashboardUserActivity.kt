@@ -64,19 +64,22 @@ class DashboardUserActivity : AppCompatActivity() {
 
 
     private fun setupWithViewPagerAdapter(viewPager: ViewPager) {
-        viewPagerAdapter = ViewPagerAdapter(
-            supportFragmentManager,
-            FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-            this
+        viewPagerAdapter = ViewPagerAdapter(    // khởi tạo ViewPagerAdapter với các tham số sau:
+            supportFragmentManager, // quản lý Fragment
+            FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT, //  chỉ tái sửa dụng Fragment hiện tại
+            this    // đối tượng hiện tại
         )
 
+        // khởi tạo danh sách Category
         categoryArrayList = ArrayList()
 
+        // lấy dữ liệu từ FirebaseDatabase
         val ref = FirebaseDatabase.getInstance().getReference("Categories")
         ref.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                categoryArrayList.clear()
+                categoryArrayList.clear()   // xóa dữ liệu cũ trong categoryArrayList
 
+                // thêm 3 category mặc định
                 val modelAll = ModelCategory("01", "All", 1, "")
                 val modelMostViewed = ModelCategory("01", "Most Viewed", 1, "")
                 val modelMostDownloaded = ModelCategory("01", "Most Downloaded", 1, "")
@@ -85,6 +88,7 @@ class DashboardUserActivity : AppCompatActivity() {
                 categoryArrayList.add(modelMostViewed)
                 categoryArrayList.add(modelMostDownloaded)
 
+                //thêm các fragment tương ứng với 3 category vào ViewPaperAdapter
                 viewPagerAdapter.addFragment(
                     BooksUserFragment.newInstance(
                         "${modelAll.id}",
@@ -107,8 +111,10 @@ class DashboardUserActivity : AppCompatActivity() {
                     ), modelMostDownloaded.category
                 )
 
+                // thông báo cho ViewPaperAdapter biết dữ liệu đã thay đổi
                 viewPagerAdapter.notifyDataSetChanged()
 
+                // thêm các category khác từ firebase vào danh sách và ViewPaperAdapter
                 for (ds in snapshot.children) {
                     val model = ds.getValue(ModelCategory::class.java)
                     categoryArrayList.add(model!!)
@@ -124,10 +130,11 @@ class DashboardUserActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-
+                // xử lý lỗi nếu phát hiện
             }
         })
 
+        // thiết lập ViewPaper với ViewPaperAdapter
         viewPager.adapter = viewPagerAdapter
     }
 
