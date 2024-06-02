@@ -54,8 +54,6 @@ class DashboardUserActivity : AppCompatActivity() {
 
     }
 
-
-
     private fun setupWithViewPagerAdapter(viewPager: ViewPager) {
         viewPagerAdapter = ViewPagerAdapter(    // khởi tạo ViewPagerAdapter với các tham số sau:
             supportFragmentManager, // quản lý Fragment
