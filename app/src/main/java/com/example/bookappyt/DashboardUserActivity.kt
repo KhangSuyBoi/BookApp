@@ -47,8 +47,9 @@ class DashboardUserActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-
+        binding.profileBtn.setOnClickListener {
+            startActivity(Intent(this@DashboardUserActivity, ProfileActivity::class.java))
+        }
 
 
     }

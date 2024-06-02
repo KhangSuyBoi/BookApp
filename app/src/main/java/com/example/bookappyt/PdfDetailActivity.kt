@@ -64,7 +64,6 @@ class PdfDetailActivity : AppCompatActivity() {
             checkIsFavorite() // Gọi hàm kiểm tra sách có nằm trong danh sách yêu thích hay không
         }
 
-
         // hien thi luot doc cua book do
         MyApplication.incrementBookViewCount(bookId)
 
