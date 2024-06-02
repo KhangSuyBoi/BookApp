@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.widget.Adapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import java.io.FileOutputStream
 import com.example.bookappyt.AdapterComment;
+import com.google.firebase.database.DatabaseReference
 
 class PdfDetailActivity : AppCompatActivity() {
     // view binding
@@ -32,6 +34,9 @@ class PdfDetailActivity : AppCompatActivity() {
     }
     private val TAG_DOWNLOAD: String = "DOWNLOAD_TAG"
     private lateinit var firebaseAuth: FirebaseAuth
+
+    private val pdfArrayList=ArrayList<ModelPdf>()
+    private lateinit var adapterPdfFavorite: AdapterPdfFavorite
 
     // lay id book tu intent
     private var bookId= ""
@@ -109,6 +114,7 @@ class PdfDetailActivity : AppCompatActivity() {
         }
 
     }
+
     private var comment = ""
 
     private fun addCommentDialog() {

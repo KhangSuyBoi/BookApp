@@ -20,10 +20,10 @@
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
-            android:name=".ForgotPasswordActivity"
-            android:exported="false" />
+            android:name=".ProfileEditActivity"
+            android:exported="false"/>
         <activity
-            android:name=".ActivityProfileBinding"
+            android:name=".ForgotPasswordActivity"
             android:exported="false" />
 
         <meta-data
