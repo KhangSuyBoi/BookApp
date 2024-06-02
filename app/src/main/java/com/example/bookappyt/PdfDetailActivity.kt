@@ -59,6 +59,11 @@ class PdfDetailActivity : AppCompatActivity() {
         progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please wait")
         progressDialog.setCanceledOnTouchOutside(false)
+        firebaseAuth = FirebaseAuth.getInstance() // Lấy instance của FirebaseAuth
+        if (firebaseAuth.currentUser != null) { // Kiểm tra xem người dùng hiện tại có đăng nhập không
+            checkIsFavorite() // Gọi hàm kiểm tra sách có nằm trong danh sách yêu thích hay không
+        }
+
 
         // hien thi luot doc cua book do
         MyApplication.incrementBookViewCount(bookId)

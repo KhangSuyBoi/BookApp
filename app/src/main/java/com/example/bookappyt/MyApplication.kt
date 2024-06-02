@@ -274,19 +274,20 @@ class MyApplication : Application() {
         }
 
         fun addToFavorite(context: Context, bookId: String) {
-            // Chỉ có thể thêm vào danh sách yêu thích nếu người dùng đã đăng nhập
-            // 1) Kiểm tra xem người dùng đã đăng nhập hay chưa
+            // Chúng ta chỉ có thể thêm vào nếu người dùng đã đăng nhập
+            // 1) Kiểm tra xem người dùng có đăng nhập không
             val firebaseAuth = FirebaseAuth.getInstance()
             if (firebaseAuth.currentUser == null) {
-                // Chưa đăng nhập, không thể thêm vào danh sách yêu thích
+                // Không đăng nhập, không thể thêm vào mục yêu thích
                 Toast.makeText(context, "You're not logged in", Toast.LENGTH_SHORT).show()
             } else {
                 val timestamp = System.currentTimeMillis()
 
-                // Thiết lập dữ liệu để thêm vào cơ sở dữ liệu Firebase của người dùng hiện tại cho cuốn sách yêu thích
-                val hashMap = HashMap<String, Any>()
-                hashMap["bookId"] = bookId
-                hashMap["timestamp"] = timestamp
+                // Thiết lập dữ liệu để thêm vào cơ sở dữ liệu firebase của người dùng hiện tại cho sách yêu thích
+                val hashMap = hashMapOf(
+                    "bookId" to bookId,
+                    "timestamp" to timestamp.toString()
+                )
 
                 // Lưu vào cơ sở dữ liệu
                 val ref = FirebaseDatabase.getInstance().getReference("Users")
@@ -300,12 +301,13 @@ class MyApplication : Application() {
                     }
             }
         }
+
         fun removeFromFavorite(context: Context, bookId: String) {
-            // Chỉ có thể xóa khỏi danh sách yêu thích nếu người dùng đã đăng nhập
-            // 1) Kiểm tra xem người dùng đã đăng nhập hay chưa
+            // Chúng ta chỉ có thể xóa nếu người dùng đã đăng nhập
+            // 1) Kiểm tra xem người dùng có đăng nhập không
             val firebaseAuth = FirebaseAuth.getInstance()
             if (firebaseAuth.currentUser == null) {
-                // Chưa đăng nhập, không thể xóa khỏi danh sách yêu thích
+                // Không đăng nhập, không thể xóa khỏi mục yêu thích
                 Toast.makeText(context, "You're not logged in", Toast.LENGTH_SHORT).show()
             } else {
                 // Xóa khỏi cơ sở dữ liệu
@@ -320,6 +322,7 @@ class MyApplication : Application() {
                     }
             }
         }
+
 
     }
 
