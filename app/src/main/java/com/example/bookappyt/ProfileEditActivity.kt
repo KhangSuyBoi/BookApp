@@ -45,25 +45,21 @@ class ProfileEditActivity : AppCompatActivity() {
         binding = ActivityProfileEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Setup progress dialog
         progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please wait")
-        progressDialog.setCanceledOnTouchOutside(false) // Don't dismiss while clicking outside of progress dialog
+        progressDialog.setCanceledOnTouchOutside(false)
 
-        // Setup Firebase Auth
+
         firebaseAuth = FirebaseAuth.getInstance()
         loadUserInfo()
 
-        // Handle click, go back
         binding.backBtn.setOnClickListener {
             onBackPressed()
         }
-        // Handle click, pick image
         binding.profileTv.setOnClickListener {
             showImageAttachMenu()
         }
 
-        // Handle click, update profile
         binding.updateBtn.setOnClickListener {
             validateData()
         }
@@ -75,7 +71,7 @@ class ProfileEditActivity : AppCompatActivity() {
         reference.child(firebaseAuth.uid!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    // Get all info of user here from snapshot
+                    // Lay tat ca du lieu cua nguoi dung o day tu snapshot
                     val email = snapshot.child("email").value.toString()
                     val name = snapshot.child("name").value.toString()
                     val profileImage = snapshot.child("profileImage").value.toString()
@@ -83,10 +79,8 @@ class ProfileEditActivity : AppCompatActivity() {
                     val uid = snapshot.child("uid").value.toString()
                     val userType = snapshot.child("userType").value.toString()
 
-                    // Set data to UI
                     binding.nameEt.setText(name)
 
-                    // Set image using Glide
                     Glide.with(this@ProfileEditActivity)
                         .load(profileImage)
                         .placeholder(R.drawable.ic_person_gray)
@@ -94,17 +88,14 @@ class ProfileEditActivity : AppCompatActivity() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    // Handle onCancelled event
+
                 }
             })
     }
-    private fun validateData() {
-        // Get data
+    private fun validateData() { // xac thuc du lieu
         name = binding.nameEt.text.toString().trim()
 
-        // Validate data
         if (name.isEmpty()) {
-            // No name is entered
             Toast.makeText(this, "Enter name...", Toast.LENGTH_SHORT).show()
         } else {
             if (imageUri == null) {
@@ -121,10 +112,10 @@ class ProfileEditActivity : AppCompatActivity() {
         progressDialog.setMessage("Updating profile image")
         progressDialog.show()
 
-        // Image path and name, use uid to replace previous
+        // Đường dẫn và tên tệp ảnh, sử dụng uid để thay thế ảnh trước đó
         val filePathAndName = "ProfileImages/${firebaseAuth.uid}"
 
-        // Storage reference
+        // Tham chiếu đến Firebase Storage
         val reference = FirebaseStorage.getInstance().getReference(filePathAndName)
         imageUri?.let {
             reference.putFile(it)
@@ -150,12 +141,12 @@ class ProfileEditActivity : AppCompatActivity() {
         progressDialog.setMessage("Updateing user profile...")
         progressDialog.show()
 
-        // Setup data to update in db
+        // Chuan bi du lieu de cap nhat
         val hashMap = HashMap<String, Any>()
         hashMap["name"] = name
         imageUrl?.let { hashMap["profileImage"] = it }
 
-        // Update data to db
+        // Cap nhat vao db
         val databaseReference = FirebaseDatabase.getInstance().getReference("Users")
         databaseReference.child(firebaseAuth.uid!!)
             .updateChildren(hashMap)
@@ -196,7 +187,7 @@ class ProfileEditActivity : AppCompatActivity() {
         }
     }
     private fun pickImageCamera() {
-        // Intent to pick image from camera
+        // Trien khai logic de mo may anh va chup anh
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.TITLE, "New Pick")
             put(MediaStore.Images.Media.DESCRIPTION, "Sample Image Description")
@@ -209,17 +200,16 @@ class ProfileEditActivity : AppCompatActivity() {
     }
 
     private fun pickImageGallery() {
-        // Intent to pick image from gallery
+        // Mo album trong thu vien dien thoai
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         galleryActivityResultLauncher.launch(intent)
     }
     private val cameraActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            // Used to handle result of camera intent
-            // Get uri of image
+            // Xử lý kết quả của intent máy ảnh
             if (result.resultCode == Activity.RESULT_OK) {
-                Log.d(TAG, "onActivityResult Picked Form camera: $imageUri") // No need here as in camera case we already have image in imageUri variable
+                Log.d(TAG, "onActivityResult Picked Form camera: $imageUri")
                 val data = result.data
                 binding.profileTv.setImageURI(imageUri)
             } else {
@@ -229,8 +219,7 @@ class ProfileEditActivity : AppCompatActivity() {
 
     private val galleryActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            // Used to handle result of gallery intent
-            // Get uri of image
+            // Xử lý kết quả của intent thư viện ảnh
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
                 imageUri = data?.data

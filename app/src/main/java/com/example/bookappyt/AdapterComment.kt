@@ -23,14 +23,12 @@ class AdapterComment(private val context: Context, private val commentArrayList:
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HolderComment {
-        // Inflate/bind the view xml
         val binding = RowCommentBinding.inflate(LayoutInflater.from(context), parent, false)
         return HolderComment(binding)
     }
 
 
     override fun onBindViewHolder(holder: HolderComment, position: Int) {
-        // Get data from specific position of list, set data, handle click etc
         val modelComment = commentArrayList[position]
         val id = modelComment.id
         val bookId = modelComment.bookId
@@ -38,7 +36,6 @@ class AdapterComment(private val context: Context, private val commentArrayList:
         val uid = modelComment.uid
         val timestamp = modelComment.timestamp
 
-        // Format date, already made function in MyApplication class
         val date = MyApplication.formatTimeStamp(timestamp.toLong())
 
         // Set data
@@ -88,12 +85,10 @@ class AdapterComment(private val context: Context, private val commentArrayList:
     }
 
     private fun deleteComment(modelComment: ModelComment, holder: HolderComment) {
-        // Show confirm dialog before deleting comment
         AlertDialog.Builder(context)
             .setTitle("Delete Comment")
             .setMessage("Are you sure you want to delete this comment?")
             .setPositiveButton("DELETE") { dialogInterface, _ ->
-                // Delete from dialog clicked, begin delete
                 val ref = FirebaseDatabase.getInstance().getReference("Books")
                 ref.child(modelComment.bookId)
                     .child("Comments")
@@ -107,7 +102,6 @@ class AdapterComment(private val context: Context, private val commentArrayList:
                     }
             }
             .setNegativeButton("CANCEL") { dialogInterface, _ ->
-                // Cancel clicked
                 dialogInterface.dismiss()
             }
             .show()

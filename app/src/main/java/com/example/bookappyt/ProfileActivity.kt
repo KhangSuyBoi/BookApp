@@ -17,16 +17,9 @@ import com.google.firebase.database.*
 
 class ProfileActivity : AppCompatActivity() {
 
-    // view binding
     private lateinit var binding: ActivityProfileBinding
-
-    // firebase auth, for loading user data using user uid
     private lateinit var firebaseAuth: FirebaseAuth
-
-    // arraylist to hold the books
     private lateinit var pdfArrayList: ArrayList<ModelPdf>
-
-    // adapter to set in recyclerview
     private lateinit var adapterPdfFavorite: AdapterPdfFavorite
 
     companion object {
@@ -37,18 +30,15 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // setup firebase auth
+        //thiet lap du lieu
         firebaseAuth = FirebaseAuth.getInstance()
         loadUserInfo()
         loadFavoriteBooks()
 
-        // handle click, start profile edit page
         binding.profileEditBtn.setOnClickListener {
             startActivity(Intent(this@ProfileActivity, ProfileEditActivity::class.java))
         }
 
-        // handle click, go back
         binding.backBtn.setOnClickListener {
             onBackPressed()
         }
@@ -69,16 +59,12 @@ class ProfileActivity : AppCompatActivity() {
                     val uid = "${snapshot.child("uid").value}"
                     val userType = "${snapshot.child("userType").value}"
 
-                    // format date to ddMMyyyy
                     val formattedDate = MyApplication.formatTimeStamp(timestamp.toLong())
-
-                    // set data to ui
                     binding.emailTv.text = email
                     binding.nameTv.text = name
                     binding.memberDateTv.text = formattedDate
                     binding.accountTypeTv.text = userType
 
-                    // set image, using glide
                     Glide.with(this@ProfileActivity)
                         .load(profileImage)
                         .placeholder(R.drawable.ic_person_gray)
@@ -92,32 +78,25 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun loadFavoriteBooks() {
-        // init list
         pdfArrayList = ArrayList()
 
-        // load favorite books from database
+        // tai favorite books cua user do tu database
         // Users -> userId -> Favorites
         val ref = FirebaseDatabase.getInstance().getReference("Users")
         ref.child(firebaseAuth.uid!!).child("Favorites")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    // clear list before starting adding data
+                    // clear  list truoc khi add data vao
                     pdfArrayList.clear()
                     for (ds in snapshot.children) {
-                        // will get only the bookId here, and got other details in adapter using that bookId
                         val bookId = "${ds.child("bookId").value}"
-
-                        // set id to model
                         val modelPdf = ModelPdf()
                         modelPdf.id = bookId
 
-                        // add model to list
                         pdfArrayList.add(modelPdf)
                     }
 
-                    // set number of favorite books
-                    binding.favoriteBookCountTv.text = "${pdfArrayList.size}"
-                    // setup adapter
+                    binding.favoriteBookCountTv.text = "${pdfArrayList.size}" // so luong sach yeu thich
                     adapterPdfFavorite = AdapterPdfFavorite(this@ProfileActivity, pdfArrayList)
                     // set adapter to recyclerview
                     binding.booksRv.adapter = adapterPdfFavorite

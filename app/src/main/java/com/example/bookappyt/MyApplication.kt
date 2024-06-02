@@ -214,20 +214,20 @@ class MyApplication : Application() {
         private fun saveDownloadedBook(context: Context, progressDialog: ProgressDialog, bytes: ByteArray, nameWithExtension: String, bookId: String) {
             Log.d(TAG_DOWNLOAD, "saveDownloadedBook: Saving downloaded book")
             try {
-                val downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                downloadsFolder.mkdirs()
+                val downloadsFolder = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) // lay thu muc tai ve tren thiet bi
+                downloadsFolder.mkdirs() // tao folder neu chua ton tai
 
-                val filePath = "${downloadsFolder.path}/$nameWithExtension"
+                val filePath = "${downloadsFolder.path}/$nameWithExtension" // duong dan
 
-                val out = FileOutputStream(filePath)
-                out.write(bytes)
+                val out = FileOutputStream(filePath) // tao 1 luong ghi du lieu ra file
+                out.write(bytes) // ghi du lieu vao file
                 out.close()
 
-                Toast.makeText(context, "Saved to Download Folder", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Saved to Download Folder", Toast.LENGTH_SHORT).show() // luu thanh cong
                 Log.d(TAG_DOWNLOAD, "saveDownloadedBook: Saved to Download Folder")
                 progressDialog.dismiss()
 
-                incrementBookDownloadCount(bookId)
+                incrementBookDownloadCount(bookId) // tang so luong tai ve
             } catch (e: Exception) {
                 Log.d(TAG_DOWNLOAD, "saveDownloadedBook: Failed saving to Download Folder due to ${e.message}")
                 Toast.makeText(context, "Failed saving to Download Folder due to ${e.message}", Toast.LENGTH_SHORT).show()
@@ -250,7 +250,7 @@ class MyApplication : Application() {
                             downloadsCount = "0"
                         }
 
-                        // Chuyển đổi sang kiểu long
+
                         val newDownloadsCount = downloadsCount.toLong() + 1
                         Log.d(TAG_DOWNLOAD, "onDataChange: New Download Count: $newDownloadsCount")
 
@@ -275,7 +275,7 @@ class MyApplication : Application() {
 
         fun addToFavorite(context: Context, bookId: String) {
             // Chỉ có thể thêm vào danh sách yêu thích nếu người dùng đã đăng nhập
-            // 1) Kiểm tra xem người dùng đã đăng nhập chưa
+            // 1) Kiểm tra xem người dùng đã đăng nhập hay chưa
             val firebaseAuth = FirebaseAuth.getInstance()
             if (firebaseAuth.currentUser == null) {
                 // Chưa đăng nhập, không thể thêm vào danh sách yêu thích
@@ -302,7 +302,7 @@ class MyApplication : Application() {
         }
         fun removeFromFavorite(context: Context, bookId: String) {
             // Chỉ có thể xóa khỏi danh sách yêu thích nếu người dùng đã đăng nhập
-            // 1) Kiểm tra xem người dùng đã đăng nhập chưa
+            // 1) Kiểm tra xem người dùng đã đăng nhập hay chưa
             val firebaseAuth = FirebaseAuth.getInstance()
             if (firebaseAuth.currentUser == null) {
                 // Chưa đăng nhập, không thể xóa khỏi danh sách yêu thích

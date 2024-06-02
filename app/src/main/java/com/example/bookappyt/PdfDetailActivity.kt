@@ -38,9 +38,7 @@ class PdfDetailActivity : AppCompatActivity() {
     private val pdfArrayList=ArrayList<ModelPdf>()
     private lateinit var adapterPdfFavorite: AdapterPdfFavorite
 
-    // lay id book tu intent
     private var bookId= ""
-    // lay tu db
     private var bookTitle = ""
     private var bookUrl = ""
     private var isInMyFavorite = false
@@ -118,23 +116,20 @@ class PdfDetailActivity : AppCompatActivity() {
     private var comment = ""
 
     private fun addCommentDialog() {
-        // Inflate and bind view for dialog
+        // Inflate và bind view cho dialog
         val commentAddBinding = DialogCommentAddBinding.inflate(layoutInflater)
 
-        // Setup alert dialog builder
+        // Thiết lập AlertDialog.Builder
         val builder = AlertDialog.Builder(this, R.style.CustomDialog)
         builder.setView(commentAddBinding.root)
 
-        // Create and show alert dialog
         val alertDialog = builder.create()
         alertDialog.show()
 
-        // Handle click, dismiss dialog
         commentAddBinding.backBtn.setOnClickListener {
             alertDialog.dismiss()
         }
 
-        // Handle click, add comment
         commentAddBinding.submitBtn.setOnClickListener {
             // Get data
             comment = commentAddBinding.commentEt.text.toString().trim()
@@ -148,26 +143,25 @@ class PdfDetailActivity : AppCompatActivity() {
         }
     }
     private fun loadComments() {
-        // Init arraylist before adding data into it
+        // Khởi tạo ArrayList trước khi thêm dữ liệu vào
         commentArrayList = ArrayList()
 
-        // DB path to load comments
+        // Đường dẫn DB để tải nhận xét
         val ref = FirebaseDatabase.getInstance().getReference("Books")
         ref.child(bookId).child("Comments")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    // Clear arrayList before adding data into it
+                    // Clear ArrayList trước khi thêm dữ liệu vào
                     commentArrayList.clear()
                     for (ds in snapshot.children) {
-                        // Get data as model, spellings of variables in model must be the same as in firebase
                         val model = ds.getValue(ModelComment::class.java)
-                        // Add to arraylist
+                        // Thêm vào ArrayList
                         model?.let { commentArrayList.add(it) }
                     }
-                    // Setup adapter
+                    // Thiết lập adapter
                     adapterComment = AdapterComment(this@PdfDetailActivity, commentArrayList)
 
-                    // Set adapter to recyclerview
+                    // Đặt adapter cho RecyclerView
                     binding.commentsRv.adapter = adapterComment
                 }
 
@@ -175,15 +169,15 @@ class PdfDetailActivity : AppCompatActivity() {
             })
     }
 
+
     private fun addComment() {
-        // Show progress
         progressDialog.setMessage("Adding comment")
         progressDialog.show()
 
-        // Timestamp for comment id, comment time
+        // Timestamp cho id của bình luận và thời gian bình luận
         val timestamp = System.currentTimeMillis().toString()
 
-        // Setup data to add in db for comment
+        // Thiết lập dữ liệu để thêm vào db cho bình luận
         val hashMap: HashMap<String, Any> = HashMap()
         hashMap["id"] = timestamp
         hashMap["bookId"] = bookId
@@ -191,23 +185,19 @@ class PdfDetailActivity : AppCompatActivity() {
         hashMap["comment"] = comment
         hashMap["uid"] = firebaseAuth.uid!!
 
-        // Db path to add data into it
         // books > bookId > comments > commentId > commentData
         val ref = FirebaseDatabase.getInstance().getReference("Books")
         ref.child(bookId).child("Comments").child(timestamp)
             .setValue(hashMap)
             .addOnSuccessListener {
-                Toast.makeText(this@PdfDetailActivity, "Comment Added...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@PdfDetailActivity, "Bình luận đã được thêm...", Toast.LENGTH_SHORT).show()
                 progressDialog.dismiss()
             }
             .addOnFailureListener { e ->
-                // Failed to add comment
                 progressDialog.dismiss()
-                Toast.makeText(this@PdfDetailActivity, "Failed to add comment due to ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@PdfDetailActivity, "Không thể thêm bình luận do ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
-
-
 
 
     private val requestStoragePermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->

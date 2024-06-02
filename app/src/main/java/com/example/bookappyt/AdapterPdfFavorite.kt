@@ -31,13 +31,12 @@ class AdapterPdfFavorite(
     }
 
     override fun onCreateViewHolder(@NonNull parent: ViewGroup, viewType: Int): HolderPdfFavorite {
-        // Inflate the row_pdf_favorite.xml layout using view binding
+        // khai bao cac thanh phan giao dien trong row_pdf_favorite.xml
         binding = RowPdfFavoriteBinding.inflate(LayoutInflater.from(context), parent, false)
         return HolderPdfFavorite(binding.root)
     }
 
     override fun onBindViewHolder(@NonNull holder: HolderPdfFavorite, position: Int) {
-        // Get data, set data, handle click
         val model = pdfArrayList[position]
 
         loadBookDetails(model, holder)
@@ -49,7 +48,6 @@ class AdapterPdfFavorite(
             context.startActivity(intent)
         }
 
-        // Handle click, remove from favorite
         holder.removeFavBtn.setOnClickListener {
             MyApplication.removeFromFavorite(context, model.id)
         }
@@ -59,11 +57,11 @@ class AdapterPdfFavorite(
         val bookId = model.id
         Log.d(TAG, "loadBookDetails: Book Details of Book ID $bookId")
 
-        val ref = FirebaseDatabase.getInstance().getReference("Books")
-        ref.child(bookId)
+        val ref = FirebaseDatabase.getInstance().getReference("Books") // tham chieu den Books
+        ref.child(bookId) // tham chieu nut con bookId
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    // Get book info
+                    // Lay du lieu
                     val bookTitle = snapshot.child("title").getValue(String::class.java) ?: ""
                     val description = snapshot.child("description").getValue(String::class.java) ?: ""
                     val categoryId = snapshot.child("categoryId").getValue(String::class.java) ?: ""
@@ -73,7 +71,6 @@ class AdapterPdfFavorite(
                     val viewsCount = snapshot.child("viewsCount").getValue(String::class.java) ?: ""
                     val downloadsCount = snapshot.child("downloadsCount").getValue(String::class.java) ?: ""
 
-                    // Set to model
                     model.favorite = true
                     model.title = bookTitle
                     model.description = description
@@ -82,33 +79,31 @@ class AdapterPdfFavorite(
                     model.uid = uid
                     model.url = bookUrl
 
-                    // Format date
                     val date = MyApplication.formatTimeStamp(timestamp.toLongOrNull() ?: 0L)
 
                     MyApplication.loadCategory(categoryId, holder.categoryTv)
                     MyApplication.loadPdfFromUrlSinglePage(bookUrl, bookTitle, holder.pdfView, holder.progressBar, null)
                     MyApplication.loadPdfSize(bookUrl, bookTitle, holder.sizeTv)
 
-                    // Set data to views
+
                     holder.titleTv.text = bookTitle
                     holder.descriptionTv.text = description
                     holder.dateTv.text = date
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    // Handle possible errors
                 }
             })
     }
 
 
     override fun getItemCount(): Int {
-        return pdfArrayList.size // Return list size/records
+        return pdfArrayList.size // tra ve so luong phan tu trong pdfArrayList
     }
 
     // ViewHolder class
     inner class HolderPdfFavorite(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // Initialize your views here using itemView.findViewById or view binding
+        // Khoi tao UI views cua row_pdf_favorite
         var pdfView: PDFView
         var progressBar: ProgressBar
         var titleTv: TextView
@@ -119,7 +114,6 @@ class AdapterPdfFavorite(
         var removeFavBtn: ImageButton
 
         init {
-            // Initialize UI views of row_pdf_favorite
             pdfView = binding.pdfView
             progressBar = binding.progressBar
             titleTv = binding.titleTv

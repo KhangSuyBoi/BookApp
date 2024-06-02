@@ -23,43 +23,34 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class DashboardUserActivity : AppCompatActivity() {
-    // view binding
     private lateinit var binding: ActivityDashboardUserBinding
-
-    // firebase auth
     private lateinit var firebaseAuth : FirebaseAuth
-
     private lateinit var categoryArrayList: ArrayList<ModelCategory>
     private lateinit var viewPagerAdapter: ViewPagerAdapter
 
-
-    // media player
-    var mMediaPlayer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardUserBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // init firebase auth
-        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseAuth  = FirebaseAuth.getInstance()
         checkUser()
+
 
         setupWithViewPagerAdapter(binding.viewPager)
         binding.tabLayout.setupWithViewPager(binding.viewPager)
 
-        // click -> logout
         binding.logoutBtn.setOnClickListener {
             firebaseAuth.signOut()
-            startActivity(Intent(this, MainActivity::class.java))
+            val intent = Intent(this@DashboardUserActivity, MainActivity::class.java)
+            startActivity(intent)
             finish()
         }
 
 
-        // click -> open profile
-        binding.profileBtn.setOnClickListener {
-            startActivity(Intent(this@DashboardUserActivity, ProfileActivity::class.java))
-        }
+
+
     }
 
 
@@ -170,14 +161,10 @@ class DashboardUserActivity : AppCompatActivity() {
         /// get current user
         val firebaseUser = firebaseAuth.currentUser
         if (firebaseUser == null) {
-            // not logged in, user can stay in user dashboard without login too
             binding.subTitleTv.text = "Not Logged in"
         }
         else {
-            // logged in, get and show user info
             val email = firebaseUser.email
-
-            // set to textview of toolbar
             binding.subTitleTv.text = email
 
         }
