@@ -74,7 +74,7 @@ class PdfViewActivity : AppCompatActivity() {
             .addOnSuccessListener { bytes ->
                 // Load pdf using bytes
                 binding.pdfView.fromBytes(bytes)
-                    .swipeHorizontal(true) // Set false to scroll vertical, set true to swipe horizontal
+                    .swipeHorizontal(false) // Set false to scroll vertical, set true to swipe horizontal
                     .onPageChange { page, pageCount ->
                         // Set current and total pages in toolbar subtitle
                         val currentPage = page + 1
