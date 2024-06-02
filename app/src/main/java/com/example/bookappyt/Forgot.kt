@@ -1,63 +1,59 @@
-package com.example.bookappyt;
+package com.example.bookappyt
 
-import android.app.ProgressDialog;
-import android.os.Bundle;
-import android.util.Patterns;
+import android.app.ProgressDialog
+import android.os.Bundle
+import android.util.Patterns
+import androidx.appcompat.app.AppCompatActivity
+import com.example.bookappyt.databinding.ActivityForgotPasswordBinding
+import com.google.firebase.auth.FirebaseAuth
+import android.widget.Toast
 
-import androidx.appcompat.app.AppCompatActivity;
+class Forgot : AppCompatActivity() {
+    private lateinit var binding: ActivityForgotPasswordBinding
+    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var progressDialog: ProgressDialog
 
-import com.example.bookappyt.databinding.ActivityForgotPasswordBinding;
-import com.google.firebase.Firebase;
-import com.google.firebase.auth.FirebaseAuth;
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityForgotPasswordBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-public class Forgot extends AppCompatActivity {
-    private ActivityForgotPasswordBinding binding;
-    private FirebaseAuth firebaseAuth;
-    private ProgressDialog progressDialog;
+        firebaseAuth = FirebaseAuth.getInstance()
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(binding.getRoot());
+        progressDialog = ProgressDialog(this)
+        progressDialog.setTitle("Please wait")
+        progressDialog.setCanceledOnTouchOutside(false)
 
-        firebaseAuth = FirebaseAuth.getInstance();
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Please wait");
-        progressDialog.setCanceledOnTouchOutside(false);
-
-        binding.backBtn.setOnClickListener(v ->  {
-            public void onClick(View v){
-                onBackPressed();
-            }
-        });
-        binding.submitBtn.setOnClickListener(v -> {
-            public void onClick(View v){
-                validateData()
-            }
-        });
+        binding.backBtn.setOnClickListener { onBackPressed() }
+        binding.submitBtn.setOnClickListener { validateData() }
     }
-    private String email = "";
-    private void validateData(){
-        email = binding.emailEt.getText().toString().trim();
-        if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            binding.emailEt.setError("Invalid Email Format");
-        }else{
-            recoverPassword();
+
+    private var email = ""
+    private fun validateData() {
+        email = binding.emailEt.text.toString().trim()
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.emailEt.error = "Invalid Email Format"
+        } else {
+            recoverPassword()
         }
     }
-    private void recoverPassword(){
-        progressDialog.setMessage("Sending instructions to reset password...");
-        progressDialog.show();
+
+    private fun recoverPassword() {
+        progressDialog.setMessage("Sending instructions to reset password...")
+        progressDialog.show()
 
         firebaseAuth.sendPasswordResetEmail(email)
-                .addOnSuccessListener(aVoid -> {
-                    progressDialog.dismiss();
-                    Toast.makeText(Forgot.this, "Password reset instructions sent to your email", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                    progressDialog.dismiss();
-                    Toast.makeText(Forgot.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                .addOnSuccessListener {
+            progressDialog.dismiss()
+            toast("Password reset instructions sent to your email")
+        }
+            .addOnFailureListener { e ->
+                progressDialog.dismiss()
+            toast(e.message.orEmpty())
+        }
+    }
+
+    private fun toast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

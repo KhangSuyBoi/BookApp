@@ -42,23 +42,24 @@ class DashboardUserActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // init firebase auth
-        firebaseAuth  = FirebaseAuth.getInstance()
+        firebaseAuth = FirebaseAuth.getInstance()
         checkUser()
-
-
-
 
         setupWithViewPagerAdapter(binding.viewPager)
         binding.tabLayout.setupWithViewPager(binding.viewPager)
 
-        binding.logoutBtn.setOnClickListener{
+        // click -> logout
+        binding.logoutBtn.setOnClickListener {
             firebaseAuth.signOut()
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
 
-
+        // click -> open profile
+        binding.profileBtn.setOnClickListener {
+            startActivity(Intent(this@DashboardUserActivity, ProfileActivity::class.java))
+        }
     }
 
 

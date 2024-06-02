@@ -4,15 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/back1"
     tools:context="PdfDetailActivity">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_translucent" />
     <!--    Toolbar-->
     <RelativeLayout
         android:id="@+id/toolbarRL"
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="@drawable/shape_toolbar02">
+
 
         <!--        Back button-->
         <ImageButton
@@ -51,7 +56,7 @@
             <!--            Book info-->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
                 <!--  Book preview-->
                 <RelativeLayout
@@ -83,7 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@+id/pdfRl"
                     android:text="Title of Book"
-                    android:textColor="@color/gray02"/>
+                    android:textColor="@color/white"/>
 
                 <!--                Table-->
                 <TableLayout
@@ -100,7 +105,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
-                            android:text="Category"/>
+                            android:text="Category"
+                            android:textColor="@color/white"/>
 
                         <TextView
                             android:id="@+id/categoryTv"
@@ -109,7 +115,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginEnd="5dp"
-                            android:text="N/A"/>
+                            android:text="N/A"
+                            android:textColor="@color/white"/>
                     </TableRow>
 
                     <!-- Date Row-->
@@ -121,7 +128,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
-                            android:text="Date"/>
+                            android:text="Date"
+                            android:textColor="@color/white"/>
 
                         <TextView
                             android:id="@+id/dateTv"
@@ -130,7 +138,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginEnd="5dp"
-                            android:text="N/A"/>
+                            android:text="N/A"
+                            android:textColor="@color/white"/>
                     </TableRow>
 
                     <!-- Size Row-->
@@ -142,7 +151,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
-                            android:text="Size"/>
+                            android:text="Size"
+                            android:textColor="@color/white"/>
 
                         <TextView
                             android:id="@+id/sizeTv"
@@ -151,7 +161,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginEnd="5dp"
-                            android:text="N/A"/>
+                            android:text="N/A"
+                            android:textColor="@color/white"/>
                     </TableRow>
 
                     <!-- Views Count Row-->
@@ -163,7 +174,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
-                            android:text="Views"/>
+                            android:text="Views"
+                            android:textColor="@color/white"/>
 
                         <TextView
                             android:id="@+id/viewsTv"
@@ -172,7 +184,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginEnd="5dp"
-                            android:text="N/A"/>
+                            android:text="N/A"
+                            android:textColor="@color/white"/>
                     </TableRow>
 
                     <!-- Downloads Count Row-->
@@ -184,7 +197,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
-                            android:text="Downloads"/>
+                            android:text="Downloads"
+                            android:textColor="@color/white"/>
 
                         <TextView
                             android:id="@+id/downloadsTv"
@@ -193,7 +207,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginEnd="5dp"
-                            android:text="N/A"/>
+                            android:text="N/A"
+                            android:textColor="@color/white"/>
                     </TableRow>
 
                     <!-- Number of Pages -->
@@ -205,7 +220,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="5dp"
-                            android:text="Pages"/>
+                            android:text="Pages"
+                            android:textColor="@color/white"/>
 
                         <TextView
                             android:id="@+id/pagesTv"
@@ -214,7 +230,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginEnd="5dp"
-                            android:text="N/A"/>
+                            android:text="N/A"
+                            android:textColor="@color/white"/>
                     </TableRow>
 
                 </TableLayout>
@@ -228,7 +245,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:text="The description of the book"
-                android:textColor="@color/gray02"/>
+                android:textColor="@color/white" />
 
             <View
                 android:layout_width="match_parent"
@@ -240,16 +257,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginTop="225dp">
+
+                </RelativeLayout>
+
                 <TextView
                     android:id="@+id/commentsLabelTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-condensed"
                     android:padding="5dp"
-                    android:background="@color/gray03"
+                    android:background="@android:color/transparent"
                     android:text="Comments"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
 
 
                 <!--button : show comment add dialog-->
@@ -257,17 +283,15 @@
                     android:id="@+id/addCommentBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd = "true"
-                    android:background="@android:color/transparent"
+                    android:layout_alignParentEnd="true"
                     android:padding="5dp"
-                    android:src="@drawable/ic_comment_black" />
+                    android:src="@drawable/ic_comment_black"/>
 
                 <!--RecyclerView : show comments-->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/commentsRv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/gray03"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:layout_below="@+id/addCommentBtn"
                     tools:listitem="@layout/row_comment"/>
@@ -323,7 +347,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableTop="@drawable/ic_favorite_border_white"
+            android:drawableTop="@drawable/ic_favorite_white"
             android:text="Add Favorite"
             android:background="@color/purple_500"
             app:backgroundTint="@null"/>

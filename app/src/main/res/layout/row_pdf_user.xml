@@ -11,7 +11,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent">
 
         <RelativeLayout
             android:id="@+id/pdfRl"
@@ -38,6 +39,7 @@
             android:layout_height="wrap_content"
             style="@style/TextAppearance.MaterialComponents.Headline6"
             android:text="Book Title"
+            android:textColor="@color/gray02"
             android:layout_toEndOf="@id/pdfRl"
             android:ellipsize="end"
             android:maxLines="1"/>
@@ -48,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Book Description"
+            android:textColor="@color/gray02"
             android:layout_toEndOf="@id/pdfRl"
             android:layout_below="@id/titleTv"
             android:maxLines="4"
@@ -60,6 +63,7 @@
             android:layout_height="wrap_content"
             style="@style/TextAppearance.MaterialComponents.Caption"
             android:text="Category"
+            android:textColor="@color/gray02"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:maxLines="1"/>
@@ -70,6 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="14 MB"
+            android:textColor="@color/gray02"
             android:layout_toEndOf="@id/pdfRl"
             android:maxLines="1"
             android:layout_alignParentBottom="true"/>
@@ -82,6 +87,7 @@
             android:layout_toEndOf="@id/sizeTv"
             android:layout_toStartOf="@id/categoryTv"
             android:text="dd/MM/yyyy"
+            android:textColor="@color/gray02"
             android:layout_alignParentBottom="true"
             android:textAlignment="center"/>
 

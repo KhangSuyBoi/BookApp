@@ -90,6 +90,11 @@ class DashboardAdminActivity : AppCompatActivity() {
             startActivity(Intent(this,PdfAddActivity::class.java))
 
         }
+
+        // click -> open profile
+        binding.profileBtn.setOnClickListener {
+            startActivity(Intent(this@DashboardAdminActivity, ProfileActivity::class.java))
+        }
     }
 
     private fun loadCategories() {
