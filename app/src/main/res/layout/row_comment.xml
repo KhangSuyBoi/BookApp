@@ -33,7 +33,8 @@
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/profileTv"
             android:text="Person Name"
-            android:textColor="@color/gray02"
+            android:textColor="@color/white"
+            android:textStyle="bold"
             android:textSize="16sp" />
 
         <!--TextView : data of comment added-->
@@ -57,7 +58,7 @@
             android:layout_below="@+id/nameTv"
             android:layout_marginTop="5dp"
             android:text="The actual comment added by some user."
-            android:textColor="@color/gray02"
+            android:textColor="@color/white"
             android:textSize="12sp"
             />
 
