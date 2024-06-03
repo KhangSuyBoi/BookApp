@@ -132,7 +132,7 @@
         android:layout_centerHorizontal="true"
         android:padding="10dp"
         android:text="@string/new_user_signup"
-        android:textColor="@color/gray01"/>
+        android:textColor="@color/gray03"/>
 
 
 </RelativeLayout>

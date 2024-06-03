@@ -8,7 +8,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black_translucent" />
+        android:background="@color/black_translucent"/>
     <!--button : goback, dismiss dialog-->
 
     <RelativeLayout
@@ -43,8 +43,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
         android:layout_marginTop="225dp">
         <!--textInputLayout : input comment-->
         <com.google.android.material.textfield.TextInputLayout
@@ -61,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_edittext01"
                 android:inputType="textCapSentences|textMultiLine" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <!--button : submit comment-->
