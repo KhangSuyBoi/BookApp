@@ -70,7 +70,7 @@ class DashboardUserActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 categoryArrayList.clear()   // xóa dữ liệu cũ trong categoryArrayList
 
-                // thêm 3 category mặc định
+                // thêm 3 mục
                 val modelAll = ModelCategory("01", "All", 1, "")
                 val modelMostViewed = ModelCategory("01", "Most Viewed", 1, "")
                 val modelMostDownloaded = ModelCategory("01", "Most Downloaded", 1, "")

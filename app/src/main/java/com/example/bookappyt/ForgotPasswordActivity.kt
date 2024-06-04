@@ -51,11 +51,13 @@ class ForgotPasswordActivity : AppCompatActivity() {
         firebaseAuth.sendPasswordResetEmail(email)
             .addOnSuccessListener {
                 progressDialog.dismiss()
-                Toast.makeText(this, "Password reset instructions sent to your email", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"Password reset instructions sent to your email", Toast.LENGTH_SHORT).show()
             }
+
             .addOnFailureListener { e ->
                 progressDialog.dismiss()
                 Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
             }
+
     }
 }

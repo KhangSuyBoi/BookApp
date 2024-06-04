@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
         // init progress dialog, will show while login account | login User
         progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please wait")
-        progressDialog.setCanceledOnTouchOutside(false)
+        progressDialog.setCanceledOnTouchOutside(false) // có được quyền chạm ra ngoài để hủy không ?(false = không)
 
         // handle click, not have account, goto register screen
         binding.noAccountTv.setOnClickListener {
@@ -47,12 +47,12 @@ class LoginActivity : AppCompatActivity() {
         // handle click, begin login
         binding.loginBtn.setOnClickListener {
             /*steps
-            * 1) Input data
-            * 2) Validate data
+            * 1) dữ liệu đầu vào
+            * 2) xác thực đầu vào
             * 3) Login - Firebase Auth
             * 4) Check user type - Firebase auth
-            *  If User - Move to user dashboard
-            *  If Admin - Move to admin dashboard*/
+            *  Nếu User -> user dashboard
+            *  Nếu Admin -> admin dashboard*/
 
             validateData()
         }
