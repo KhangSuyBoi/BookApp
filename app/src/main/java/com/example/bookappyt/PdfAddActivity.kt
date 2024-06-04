@@ -175,13 +175,11 @@ class   PdfAddActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("Books")
         ref.child("$timestamp").setValue(hashMap) //them du lieu vao db tham chieu den nut timestam cua Book
             .addOnSuccessListener {
-
                 Log.d(TAG, "uploadPdfInfoToDb: uploaded to db")
                 progressDialog.dismiss()
                 Toast.makeText(this, "uploaded...", Toast.LENGTH_SHORT)
                     .show()
                 pdfUri = null
-
             }.addOnFailureListener { e ->
                 Log.d(TAG, "uploadPdfInfoToDb: failed to upload due to ${e.message}")
                 progressDialog.dismiss()

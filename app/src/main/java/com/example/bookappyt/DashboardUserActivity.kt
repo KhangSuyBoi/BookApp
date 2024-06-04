@@ -73,11 +73,11 @@ class DashboardUserActivity : AppCompatActivity() {
                 // thêm 3 mục
                 val modelAll = ModelCategory("01", "All", 1, "")
                 val modelMostViewed = ModelCategory("01", "Most Viewed", 1, "")
-                val modelMostDownloaded = ModelCategory("01", "Most Downloaded", 1, "")
+                //val modelMostDownloaded = ModelCategory("01", "Most Downloaded", 1, "")
 
                 categoryArrayList.add(modelAll)
                 categoryArrayList.add(modelMostViewed)
-                categoryArrayList.add(modelMostDownloaded)
+                //categoryArrayList.add(modelMostDownloaded)
 
                 //thêm các fragment tương ứng với 3 category vào ViewPaperAdapter
                 viewPagerAdapter.addFragment(
@@ -94,13 +94,13 @@ class DashboardUserActivity : AppCompatActivity() {
                         "${modelMostViewed.uid}",
                     ), modelMostViewed.category
                 )
-                viewPagerAdapter.addFragment(
+                /*viewPagerAdapter.addFragment(
                     BooksUserFragment.newInstance(
                         "${modelMostDownloaded.id}",
                         "${modelMostDownloaded.category}",
                         "${modelMostDownloaded.uid}",
                     ), modelMostDownloaded.category
-                )
+                )*/
 
                 // thông báo cho ViewPaperAdapter biết dữ liệu đã thay đổi
                 viewPagerAdapter.notifyDataSetChanged()

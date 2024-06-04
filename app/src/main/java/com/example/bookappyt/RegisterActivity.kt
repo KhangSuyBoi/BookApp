@@ -12,13 +12,8 @@ import com.google.firebase.database.FirebaseDatabase
 
 class RegisterActivity : AppCompatActivity() {
 
-    // view binding - truy cập và tương tác với các view trong layout của màn hình đki
     private lateinit var binding: ActivityRegisterBinding
-
-    // khởi tạo firebase auth - xử lý các liên quan tới xác thực người dùng
     private lateinit var firebaseAuth: FirebaseAuth
-
-    // khởi tạo các hộp thoại để hiển thị
     private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,14 +21,11 @@ class RegisterActivity : AppCompatActivity() {
         // lưu các giá trị đang bị hủy ? - khởi tạo các logic đúng để chạy Activity
         super.onCreate(savedInstanceState)
 
-        //truy cập và tương tác với các view trong layout
         binding = ActivityRegisterBinding.inflate(layoutInflater)
-        setContentView(binding.root) //xét nội dung hiển thị là các layout được tạo trong view.binding
+        setContentView(binding.root)
 
-        // khởi tạo firebase auth
         firebaseAuth = FirebaseAuth.getInstance()
 
-        // Khởi tạo hộp thoại, nó sẽ hiển thị trong khi tạo Account mới
         progressDialog = ProgressDialog(this)
         progressDialog.setTitle("Please wait")
         progressDialog.setCanceledOnTouchOutside(false)
@@ -58,37 +50,29 @@ class RegisterActivity : AppCompatActivity() {
     private var email = ""
     private var password = ""
     private fun validateData() {
-        // 1) Dữ liệu đầu vào : lấy dữ liệu từ view binding của mỗi giá trị và loại bỏ khoảng trắng dư thừa
         name = binding.nameEt.text.toString().trim()
         email = binding.emailEt.text.toString().trim()
         password = binding.passwordEt.text.toString().trim()
-        val cPassword = binding.cPasswordEt.text.toString().trim() //confirm password
+        val cPassword = binding.cPasswordEt.text.toString().trim()
 
         // 2) Xác thực dữ liệu người dùng
         if (name.isEmpty())
-        //hiển thị thông báo nhỏ - Nếu không nhập Tên
             Toast.makeText(this, "Enter your name ...", Toast.LENGTH_SHORT).show()
         else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            //Kiểm tra email đúng định dạng không
             Toast.makeText(this, "Invalid Email Pattern ...", Toast.LENGTH_SHORT).show()
         } else if (password.isEmpty()) {
-            //hiển thị thông báo nhỏ - nếu để trống password
             Toast.makeText(this, "Enter password ...", Toast.LENGTH_SHORT).show()
         } else if (cPassword.isEmpty()) {
-            //hiển thị thông báo nhỏ - nếu để trống confirm password
             Toast.makeText(this, "Confirm password ...", Toast.LENGTH_SHORT).show()
         } else if (password != cPassword) {
-            //nếu password và confirmPasswork không khớp nhau
             Toast.makeText(this, "Password doesn't match ...", Toast.LENGTH_SHORT).show()
         } else {
-            createUserAccount() // khởi tạo
+            createUserAccount()
         }
 
     }
 
     private fun createUserAccount() {
-        // Tạo tài khoản mới- firebase auth
-        // hiển thị hộp thoại khi đang tạo tài khoản
         progressDialog.setMessage("Creating Account")
         progressDialog.show()
 
@@ -99,7 +83,6 @@ class RegisterActivity : AppCompatActivity() {
                 updateUserInfo()
             }
             .addOnFailureListener { e ->
-                // nếu fail, hiểu thị hộp thoại này
                 progressDialog.dismiss()
                 Toast.makeText(
                     this,
@@ -116,14 +99,12 @@ class RegisterActivity : AppCompatActivity() {
 
         // lấy thông tin người dùng
         val uid = firebaseAuth.uid // lấy id của người dùng
-        //setup date to add in db
         val hashMap: HashMap<String, Any?> = HashMap() // tạo 1 hasmMap chứa thông tin ngừoi dùng
         hashMap["uid"] = uid
         hashMap["email"] = email
         hashMap["name"] = name
         hashMap["profileImage"] = ""
-        hashMap["userType"] =
-            "user" // thông thường sẽ là user, nếu muốn đổi sang user/admin thì sẽ chuyển trong db
+        hashMap["userType"] = "user" // thông thường sẽ là user, nếu muốn đổi sang user/admin thì sẽ chuyển trong db
         hashMap["timestamp"] = timestamp
 
         // lưu  thông tin người dùng vào FRD
@@ -139,13 +120,10 @@ class RegisterActivity : AppCompatActivity() {
                 "Account created...",
                 Toast.LENGTH_SHORT
             ).show()
-
-            // tiếp theo sẽ chuyển đến màn hình RA
             startActivity(Intent(this@RegisterActivity, DashboardUserActivity::class.java))
             finish()
 
         }.addOnFailureListener { e -> // nếu tạo không thành công
-            // failed creating account
             progressDialog.dismiss()
             Toast.makeText(
                 this,

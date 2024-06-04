@@ -24,7 +24,6 @@ class BooksUserFragment: Fragment {
 
         public fun newInstance(categoryId: String, category: String, uid: String): BooksUserFragment {
             val fragment = BooksUserFragment()
-            // tạo một đối tượng "Bundle" để lưu trữ các tham số
             val args = Bundle()
             // lưu các tham số vào đối tượng "Bundle"
             args.putString("categoryId", categoryId)

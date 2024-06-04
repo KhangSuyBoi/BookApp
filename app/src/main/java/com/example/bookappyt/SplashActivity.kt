@@ -16,30 +16,27 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        setContentView(R.layout.activity_splash) // lay xml de hien thi UI
 
-        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseAuth = FirebaseAuth.getInstance() // truy cap vao chuc nang xac thuc cua Firebase
 
         Handler().postDelayed(Runnable {
-                                       checkUser()
-//            startActivity(Intent(this, MainActivity::class.java))
-
-        }, 2000) // means 2 seconds
+            checkUser()
+        }, 2000) // 2 seconds
 
 
     }
 
     private fun checkUser() {
-        // get current user, if logged in or not
         val firebaseUser = firebaseAuth.currentUser
         if (firebaseUser == null)
         {
-            // user not logged in, goto main screen
+            // k log in
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
         else{
-            // user logged in, check user type, same as done in login screen
+
             val ref = FirebaseDatabase.getInstance().getReference("Users")
             ref.child(firebaseUser.uid)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -51,21 +48,14 @@ class SplashActivity : AppCompatActivity() {
                         val userType = snapshot.child("userType").value
 
                         if (userType == "user") {
-
-                            // its simple user, open user dashboard
                             startActivity(Intent(this@SplashActivity, DashboardUserActivity::class.java))
                             finish()
 
                         } else if (userType == "admin") {
-
-                            // its admin, open admin dashboard
                             startActivity(Intent(this@SplashActivity, DashboardAdminActivity::class.java))
                             finish()
-
                         }
                     }
-
-
                     override fun onCancelled(error: DatabaseError) {
 
                     }
@@ -73,7 +63,3 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 }
-/*Keep user logged in
-* 1) Check if user logged in
-* 2) Check type of users
-* */

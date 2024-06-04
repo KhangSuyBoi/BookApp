@@ -48,7 +48,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         progressDialog.setMessage("Sending instructions to reset password...")
         progressDialog.show()
 
-        firebaseAuth.sendPasswordResetEmail(email)
+        firebaseAuth.sendPasswordResetEmail(email) // gui reset password den email
             .addOnSuccessListener {
                 progressDialog.dismiss()
                 Toast.makeText(this,"Password reset instructions sent to your email", Toast.LENGTH_SHORT).show()

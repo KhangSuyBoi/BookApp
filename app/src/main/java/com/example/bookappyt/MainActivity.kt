@@ -8,7 +8,6 @@ import com.example.bookappyt.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    // view binding - cho phép truy cập và tương tác với các view (button, text,...)
     private lateinit var binding: ActivityMainBinding
 
 
